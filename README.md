@@ -1,0 +1,30 @@
+# NestJS Template with MongoDB, Swagger and JWT Auth
+
+## Description
+
+This template contains a basic setup for a NestJS project with MongoDB, Swagger and JWT Auth. I have also added a basic user module with CRUD operations for reference.
+
+### Install dependencies
+
+```bash
+$ npm install
+```
+
+### Set environment variables
+
+```bash
+> Create a env file
+> Paste: MONGO_URI= YOUR_MONGO_URI
+> Paste: JWT_SECRET=YOUR_SECRET
+```
+
+### Start the server
+
+```bash
+$ npm start
+```
+
+### Swagger
+> http://localhost:5000/docs
+
+
