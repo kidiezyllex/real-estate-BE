@@ -183,6 +183,88 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   }
   ```
 
+#### Tìm kiếm căn hộ
+- **Endpoint:** `GET /homes/search?q=`
+- **Headers:** `Authorization: Bearer token`
+- **Params:** `q` (từ khóa tìm kiếm)
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Success",
+    "data": [
+      {
+        "_id": "...",
+        "name": "Căn hộ A-123",
+        "address": "123 Đường ABC, Quận 1, TP.HCM",
+        "area": 80,
+        "floor": 5,
+        "bedroom": 2,
+        "toilet": 2,
+        "homeOwnerId": "...",
+        "status": 1,
+        "price": 10000000
+      }
+    ]
+  }
+  ```
+
+#### Lấy danh sách căn hộ theo chủ nhà
+- **Endpoint:** `GET /homes/homeowner/:homeOwnerId`
+- **Headers:** `Authorization: Bearer token`
+- **Params:** `homeOwnerId` (MongoDB ObjectId)
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Success",
+    "data": [
+      {
+        "_id": "...",
+        "name": "Căn hộ A-123",
+        "address": "123 Đường ABC, Quận 1, TP.HCM",
+        "area": 80,
+        "floor": 5,
+        "bedroom": 2,
+        "toilet": 2,
+        "homeOwnerId": "...",
+        "status": 1,
+        "price": 10000000
+      }
+    ]
+  }
+  ```
+
+#### Xem chi tiết căn hộ
+- **Endpoint:** `GET /homes/:id`
+- **Headers:** `Authorization: Bearer token`
+- **Params:** `id` (MongoDB ObjectId)
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Success",
+    "data": {
+      "_id": "...",
+      "name": "Căn hộ A-123",
+      "address": "123 Đường ABC, Quận 1, TP.HCM",
+      "area": 80,
+      "floor": 5,
+      "bedroom": 2,
+      "toilet": 2,
+      "homeOwnerId": {
+        "_id": "...",
+        "fullname": "Lê Thị D"
+      },
+      "status": 1,
+      "price": 10000000,
+      "description": "Căn hộ view đẹp, ánh sáng tự nhiên",
+      "createdAt": "...",
+      "updatedAt": "..."
+    }
+  }
+  ```
+
 #### Tạo căn hộ mới
 - **Endpoint:** `POST /homes`
 - **Headers:** `Authorization: Bearer token`
@@ -452,7 +534,168 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   }
   ```
 
-### 5. Quản lý Hợp đồng nhà
+### 5. Quản lý Chủ nhà
+
+#### Lấy danh sách chủ nhà
+- **Endpoint:** `GET /home-owners`
+- **Headers:** `Authorization: Bearer token`
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Success",
+    "data": [
+      {
+        "_id": "...",
+        "fullname": "Lê Thị D",
+        "phone": "0912345678",
+        "email": "d@example.com",
+        "citizenId": "012345678901",
+        "citizen_date": "2020-01-01",
+        "citizen_place": "Hà Nội",
+        "birthday": "1985-01-01",
+        "address": "456 Đường XYZ, Quận 2, TP.HCM",
+        "bankAccount": "987654321",
+        "bankName": "VCB",
+        "createdAt": "...",
+        "updatedAt": "..."
+      }
+    ]
+  }
+  ```
+
+#### Tìm kiếm chủ nhà
+- **Endpoint:** `GET /home-owners/search?q=`
+- **Headers:** `Authorization: Bearer token`
+- **Params:** `q` (từ khóa tìm kiếm)
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Success",
+    "data": [
+      {
+        "_id": "...",
+        "fullname": "Lê Thị D",
+        "phone": "0912345678",
+        "email": "d@example.com"
+      }
+    ]
+  }
+  ```
+
+#### Xem chi tiết chủ nhà
+- **Endpoint:** `GET /home-owners/:id`
+- **Headers:** `Authorization: Bearer token`
+- **Params:** `id` (MongoDB ObjectId)
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Success",
+    "data": {
+      "_id": "...",
+      "fullname": "Lê Thị D",
+      "phone": "0912345678",
+      "email": "d@example.com",
+      "citizenId": "012345678901",
+      "citizen_date": "2020-01-01",
+      "citizen_place": "Hà Nội",
+      "birthday": "1985-01-01",
+      "address": "456 Đường XYZ, Quận 2, TP.HCM",
+      "bankAccount": "987654321",
+      "bankName": "VCB",
+      "createdAt": "...",
+      "updatedAt": "..."
+    }
+  }
+  ```
+
+#### Tạo chủ nhà mới
+- **Endpoint:** `POST /home-owners`
+- **Headers:** `Authorization: Bearer token`
+- **Request:**
+  ```json
+  {
+    "fullname": "Lê Thị D",
+    "phone": "0912345678",
+    "email": "d@example.com",
+    "citizenId": "012345678901",
+    "citizen_date": "2020-01-01",
+    "citizen_place": "Hà Nội",
+    "birthday": "1985-01-01",
+    "address": "456 Đường XYZ, Quận 2, TP.HCM",
+    "bankAccount": "987654321",
+    "bankName": "VCB"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "statusCode": 201,
+    "message": "Tạo chủ nhà thành công",
+    "data": {
+      "_id": "...",
+      "fullname": "Lê Thị D",
+      "phone": "0912345678",
+      "email": "d@example.com",
+      "citizenId": "012345678901",
+      "citizen_date": "2020-01-01",
+      "citizen_place": "Hà Nội",
+      "birthday": "1985-01-01",
+      "address": "456 Đường XYZ, Quận 2, TP.HCM",
+      "bankAccount": "987654321",
+      "bankName": "VCB",
+      "createdAt": "...",
+      "updatedAt": "..."
+    }
+  }
+  ```
+
+#### Cập nhật thông tin chủ nhà
+- **Endpoint:** `PATCH /home-owners/:id`
+- **Headers:** `Authorization: Bearer token`
+- **Params:** `id` (MongoDB ObjectId)
+- **Request:**
+  ```json
+  {
+    "phone": "0987654321",
+    "bankAccount": "123456789",
+    "bankName": "ACB"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Cập nhật chủ nhà thành công",
+    "data": {
+      "_id": "...",
+      "phone": "0987654321",
+      "bankAccount": "123456789",
+      "bankName": "ACB",
+      "updatedAt": "..."
+    }
+  }
+  ```
+
+#### Xóa chủ nhà
+- **Endpoint:** `DELETE /home-owners/:id`
+- **Headers:** `Authorization: Bearer token`
+- **Params:** `id` (MongoDB ObjectId)
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Xóa chủ nhà thành công",
+    "data": {
+      "_id": "...",
+      "deleted": true
+    }
+  }
+  ```
+
+### 6. Quản lý Hợp đồng nhà
 
 #### Lấy danh sách hợp đồng
 - **Endpoint:** `GET /home-contracts`
@@ -659,7 +902,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   }
   ```
 
-### 6. Quản lý Hợp đồng dịch vụ
+### 7. Quản lý Hợp đồng dịch vụ
 
 #### Lấy danh sách hợp đồng dịch vụ
 - **Endpoint:** `GET /service-contracts`
@@ -911,468 +1154,6 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   }
   ```
 
-### 7. Quản lý Thanh toán
-
-#### Lấy danh sách hóa đơn thanh toán
-- **Endpoint:** `GET /invoice-payments`
-- **Headers:** `Authorization: Bearer token`
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Success",
-    "data": [
-      {
-        "_id": "...",
-        "homeContractId": "...",
-        "homeId": "...",
-        "type": 1,
-        "dateStar": "2023-01-01",
-        "dateEnd": "2023-04-01",
-        "datePaymentRemind": "2023-03-25",
-        "datePaymentExpec": "2023-04-01",
-        "datePaymentReal": "2023-04-01",
-        "statusPaym": 2,
-        "totalReceive": 30000000,
-        "totalSend": 30000000
-      }
-    ]
-  }
-  ```
-
-#### Lấy danh sách hóa đơn sắp đến hạn
-- **Endpoint:** `GET /invoice-payments/due`
-- **Headers:** `Authorization: Bearer token`
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Success",
-    "data": [
-      {
-        "_id": "...",
-        "homeContractId": {
-          "_id": "...",
-          "guestId": {
-            "_id": "...",
-            "fullname": "Nguyễn Văn A",
-            "phone": "0912345678"
-          }
-        },
-        "homeId": {
-          "_id": "...",
-          "name": "Căn hộ A-123"
-        },
-        "type": 1,
-        "dateStar": "2023-01-01",
-        "dateEnd": "2023-04-01",
-        "datePaymentRemind": "2023-03-25",
-        "datePaymentExpec": "2023-04-01",
-        "statusPaym": 1,
-        "totalReceive": 30000000
-      }
-    ]
-  }
-  ```
-
-#### Lấy danh sách hóa đơn theo hợp đồng nhà
-- **Endpoint:** `GET /invoice-payments/home-contract/:homeContractId`
-- **Headers:** `Authorization: Bearer token`
-- **Params:** `homeContractId` (MongoDB ObjectId)
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Success",
-    "data": [
-      {
-        "_id": "...",
-        "homeContractId": "...",
-        "homeId": "...",
-        "type": 1,
-        "dateStar": "2023-01-01",
-        "dateEnd": "2023-04-01",
-        "datePaymentRemind": "2023-03-25",
-        "datePaymentExpec": "2023-04-01",
-        "datePaymentReal": "2023-04-01",
-        "statusPaym": 2,
-        "totalReceive": 30000000,
-        "totalSend": 30000000
-      }
-    ]
-  }
-  ```
-
-#### Lấy danh sách hóa đơn theo hợp đồng dịch vụ
-- **Endpoint:** `GET /invoice-payments/service-contract/:serviceContractId`
-- **Headers:** `Authorization: Bearer token`
-- **Params:** `serviceContractId` (MongoDB ObjectId)
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Success",
-    "data": [
-      {
-        "_id": "...",
-        "serviceContractId": "...",
-        "homeId": "...",
-        "type": 2,
-        "dateStar": "2023-01-01",
-        "dateEnd": "2023-04-01",
-        "datePaymentRemind": "2023-03-25",
-        "datePaymentExpec": "2023-04-01",
-        "datePaymentReal": "2023-04-01",
-        "statusPaym": 2,
-        "totalReceive": 1500000,
-        "totalSend": 1500000
-      }
-    ]
-  }
-  ```
-
-#### Lấy danh sách hóa đơn theo căn hộ
-- **Endpoint:** `GET /invoice-payments/home/:homeId`
-- **Headers:** `Authorization: Bearer token`
-- **Params:** `homeId` (MongoDB ObjectId)
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Success",
-    "data": [
-      {
-        "_id": "...",
-        "homeContractId": "...",
-        "homeId": "...",
-        "type": 1,
-        "dateStar": "2023-01-01",
-        "dateEnd": "2023-04-01",
-        "datePaymentRemind": "2023-03-25",
-        "datePaymentExpec": "2023-04-01",
-        "statusPaym": 1,
-        "totalReceive": 30000000
-      }
-    ]
-  }
-  ```
-
-#### Xem chi tiết hóa đơn
-- **Endpoint:** `GET /invoice-payments/:id`
-- **Headers:** `Authorization: Bearer token`
-- **Params:** `id` (MongoDB ObjectId)
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Success",
-    "data": {
-      "_id": "...",
-      "homeContractId": "...",
-      "homeId": {
-        "_id": "...",
-        "name": "Căn hộ A-123"
-      },
-      "type": 1,
-      "dateStar": "2023-01-01",
-      "dateEnd": "2023-04-01",
-      "datePaymentRemind": "2023-03-25",
-      "datePaymentExpec": "2023-04-01",
-      "datePaymentReal": "2023-04-01",
-      "statusPaym": 2,
-      "totalReceive": 30000000,
-      "totalSend": 30000000,
-      "createdAt": "...",
-      "updatedAt": "..."
-    }
-  }
-  ```
-
-#### Tạo hóa đơn mới
-- **Endpoint:** `POST /invoice-payments`
-- **Headers:** `Authorization: Bearer token`
-- **Request:**
-  ```json
-  {
-    "homeId": "60d21b4667d0d8992e610c86",
-    "type": 1,
-    "homeContractId": "60d21b4667d0d8992e610c88",
-    "serviceContractId": null,
-    "receiverId": "60d21b4667d0d8992e610c90",
-    "dateStar": "2023-01-01",
-    "dateEnd": "2023-04-01",
-    "datePaymentRemind": "2023-03-25",
-    "datePaymentExpec": "2023-04-01",
-    "statusPaym": 1,
-    "totalReceive": 30000000
-  }
-  ```
-- **Response:**
-  ```json
-  {
-    "statusCode": 201,
-    "message": "Tạo hóa đơn thành công",
-    "data": {
-      "_id": "...",
-      "homeId": "60d21b4667d0d8992e610c86",
-      "type": 1,
-      "homeContractId": "60d21b4667d0d8992e610c88",
-      "receiverId": "60d21b4667d0d8992e610c90",
-      "dateStar": "2023-01-01",
-      "dateEnd": "2023-04-01",
-      "datePaymentRemind": "2023-03-25",
-      "datePaymentExpec": "2023-04-01",
-      "statusPaym": 1,
-      "totalReceive": 30000000,
-      "createdAt": "...",
-      "updatedAt": "..."
-    }
-  }
-  ```
-
-#### Cập nhật thông tin hóa đơn
-- **Endpoint:** `PATCH /invoice-payments/:id`
-- **Headers:** `Authorization: Bearer token`
-- **Params:** `id` (MongoDB ObjectId)
-- **Request:**
-  ```json
-  {
-    "datePaymentRemind": "2023-03-28",
-    "totalReceive": 32000000
-  }
-  ```
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Cập nhật hóa đơn thành công",
-    "data": {
-      "_id": "...",
-      "datePaymentRemind": "2023-03-28",
-      "totalReceive": 32000000,
-      "updatedAt": "..."
-    }
-  }
-  ```
-
-#### Cập nhật trạng thái thanh toán
-- **Endpoint:** `PATCH /invoice-payments/:id/status`
-- **Headers:** `Authorization: Bearer token`
-- **Params:** 
-  - `id` (MongoDB ObjectId)
-  - `status` (1-Chưa thanh toán, 2-Đã thanh toán)
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Cập nhật trạng thái thanh toán thành công",
-    "data": {
-      "_id": "...",
-      "statusPaym": 2,
-      "datePaymentReal": "2023-04-01",
-      "updatedAt": "..."
-    }
-  }
-  ```
-
-#### Xóa hóa đơn
-- **Endpoint:** `DELETE /invoice-payments/:id`
-- **Headers:** `Authorization: Bearer token`
-- **Params:** `id` (MongoDB ObjectId)
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Xóa hóa đơn thành công",
-    "data": {
-      "_id": "...",
-      "deleted": true
-    }
-  }
-  ```
-
-#### Tạo tự động đợt thanh toán cho hợp đồng nhà
-- **Endpoint:** `POST /invoice-payments/generate/home-contract/:homeContractId`
-- **Headers:** `Authorization: Bearer token`
-- **Response:**
-  ```json
-  {
-    "statusCode": 201,
-    "message": "Đã tạo các đợt thanh toán thành công",
-    "data": [
-      {
-        "_id": "...",
-        "homeContractId": "...",
-        "homeId": "...",
-        "type": 1,
-        "dateStar": "2023-01-01",
-        "dateEnd": "2023-04-01",
-        "datePaymentRemind": "2023-03-25",
-        "datePaymentExpec": "2023-04-01",
-        "statusPaym": 1,
-        "totalReceive": 30000000
-      }
-    ]
-  }
-  ```
-
-#### Tạo tự động đợt thanh toán cho hợp đồng dịch vụ
-- **Endpoint:** `POST /invoice-payments/generate/service-contract/:serviceContractId`
-- **Headers:** `Authorization: Bearer token`
-- **Params:** `serviceContractId` (MongoDB ObjectId)
-- **Response:**
-  ```json
-  {
-    "statusCode": 201,
-    "message": "Đã tạo các đợt thanh toán thành công",
-    "data": [
-      {
-        "_id": "...",
-        "serviceContractId": "...",
-        "homeId": "...",
-        "type": 2,
-        "dateStar": "2023-01-01",
-        "dateEnd": "2023-04-01",
-        "datePaymentRemind": "2023-03-25",
-        "datePaymentExpec": "2023-04-01",
-        "statusPaym": 1,
-        "totalReceive": 1500000
-      }
-    ]
-  }
-  ```
-
-### Quản lý Dịch vụ
-
-#### Lấy danh sách dịch vụ
-- **Endpoint:** `GET /services`
-- **Headers:** `Authorization: Bearer token`
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Success",
-    "data": [
-      {
-        "_id": "...",
-        "name": "Dọn vệ sinh",
-        "price": 500000,
-        "description": "Dọn vệ sinh 1 lần/tuần",
-        "createdAt": "...",
-        "updatedAt": "..."
-      }
-    ]
-  }
-  ```
-
-#### Tìm kiếm dịch vụ
-- **Endpoint:** `GET /services/search?q=`
-- **Headers:** `Authorization: Bearer token`
-- **Params:** `q` (từ khóa tìm kiếm)
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Success",
-    "data": [
-      {
-        "_id": "...",
-        "name": "Dọn vệ sinh",
-        "price": 500000,
-        "description": "Dọn vệ sinh 1 lần/tuần"
-      }
-    ]
-  }
-  ```
-
-#### Xem chi tiết dịch vụ
-- **Endpoint:** `GET /services/:id`
-- **Headers:** `Authorization: Bearer token`
-- **Params:** `id` (MongoDB ObjectId)
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Success",
-    "data": {
-      "_id": "...",
-      "name": "Dọn vệ sinh",
-      "price": 500000,
-      "description": "Dọn vệ sinh 1 lần/tuần",
-      "createdAt": "...",
-      "updatedAt": "..."
-    }
-  }
-  ```
-
-#### Tạo dịch vụ mới
-- **Endpoint:** `POST /services`
-- **Headers:** `Authorization: Bearer token`
-- **Request:**
-  ```json
-  {
-    "name": "Dọn vệ sinh",
-    "price": 500000,
-    "description": "Dọn vệ sinh 1 lần/tuần"
-  }
-  ```
-- **Response:**
-  ```json
-  {
-    "statusCode": 201,
-    "message": "Tạo dịch vụ thành công",
-    "data": {
-      "_id": "...",
-      "name": "Dọn vệ sinh",
-      "price": 500000,
-      "description": "Dọn vệ sinh 1 lần/tuần",
-      "createdAt": "...",
-      "updatedAt": "..."
-    }
-  }
-  ```
-
-#### Cập nhật thông tin dịch vụ
-- **Endpoint:** `PATCH /services/:id`
-- **Headers:** `Authorization: Bearer token`
-- **Params:** `id` (MongoDB ObjectId)
-- **Request:**
-  ```json
-  {
-    "name": "Dọn vệ sinh cao cấp",
-    "price": 700000
-  }
-  ```
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Cập nhật dịch vụ thành công",
-    "data": {
-      "_id": "...",
-      "name": "Dọn vệ sinh cao cấp",
-      "price": 700000,
-      "updatedAt": "..."
-    }
-  }
-  ```
-
-#### Xóa dịch vụ
-- **Endpoint:** `DELETE /services/:id`
-- **Headers:** `Authorization: Bearer token`
-- **Params:** `id` (MongoDB ObjectId)
-- **Response:**
-  ```json
-  {
-    "statusCode": 200,
-    "message": "Xóa dịch vụ thành công",
-    "data": {
-      "_id": "...",
-      "deleted": true
-    }
-  }
-  ```
-
 ### 8. Thống kê
 
 #### Thống kê tổng quan
@@ -1491,6 +1272,149 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
           "daysUntilDue": 5
         }
       ]
+    }
+  }
+  ```
+
+### 9. Quản lý Người nhận
+
+#### Lấy danh sách người nhận
+- **Endpoint:** `GET /receivers`
+- **Headers:** `Authorization: Bearer token`
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Success",
+    "data": [
+      {
+        "_id": "...",
+        "fullname": "Trần Văn C",
+        "phone": "0987654321",
+        "email": "c@example.com",
+        "bankAccount": "123456789",
+        "bankName": "VCB",
+        "address": "789 Đường ABC, Quận 3, TP.HCM",
+        "createdAt": "...",
+        "updatedAt": "..."
+      }
+    ]
+  }
+  ```
+
+#### Tìm kiếm người nhận
+- **Endpoint:** `GET /receivers/search?q=`
+- **Headers:** `Authorization: Bearer token`
+- **Params:** `q` (từ khóa tìm kiếm)
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Success",
+    "data": [
+      {
+        "_id": "...",
+        "fullname": "Trần Văn C",
+        "phone": "0987654321",
+        "email": "c@example.com"
+      }
+    ]
+  }
+  ```
+
+#### Xem chi tiết người nhận
+- **Endpoint:** `GET /receivers/:id`
+- **Headers:** `Authorization: Bearer token`
+- **Params:** `id` (MongoDB ObjectId)
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Success",
+    "data": {
+      "_id": "...",
+      "fullname": "Trần Văn C",
+      "phone": "0987654321",
+      "email": "c@example.com",
+      "bankAccount": "123456789",
+      "bankName": "VCB",
+      "address": "789 Đường ABC, Quận 3, TP.HCM",
+      "createdAt": "...",
+      "updatedAt": "..."
+    }
+  }
+  ```
+
+#### Tạo người nhận mới
+- **Endpoint:** `POST /receivers`
+- **Headers:** `Authorization: Bearer token`
+- **Request:**
+  ```json
+  {
+    "fullname": "Trần Văn C",
+    "phone": "0987654321",
+    "email": "c@example.com",
+    "bankAccount": "123456789",
+    "bankName": "VCB",
+    "address": "789 Đường ABC, Quận 3, TP.HCM"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "statusCode": 201,
+    "message": "Tạo người nhận thành công",
+    "data": {
+      "_id": "...",
+      "fullname": "Trần Văn C",
+      "phone": "0987654321",
+      "email": "c@example.com",
+      "bankAccount": "123456789",
+      "bankName": "VCB",
+      "address": "789 Đường ABC, Quận 3, TP.HCM",
+      "createdAt": "...",
+      "updatedAt": "..."
+    }
+  }
+  ```
+
+#### Cập nhật thông tin người nhận
+- **Endpoint:** `PATCH /receivers/:id`
+- **Headers:** `Authorization: Bearer token`
+- **Params:** `id` (MongoDB ObjectId)
+- **Request:**
+  ```json
+  {
+    "phone": "0912345678",
+    "bankAccount": "987654321"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Cập nhật người nhận thành công",
+    "data": {
+      "_id": "...",
+      "phone": "0912345678",
+      "bankAccount": "987654321",
+      "updatedAt": "..."
+    }
+  }
+  ```
+
+#### Xóa người nhận
+- **Endpoint:** `DELETE /receivers/:id`
+- **Headers:** `Authorization: Bearer token`
+- **Params:** `id` (MongoDB ObjectId)
+- **Response:**
+  ```json
+  {
+    "statusCode": 200,
+    "message": "Xóa người nhận thành công",
+    "data": {
+      "_id": "...",
+      "deleted": true
     }
   }
   ```
