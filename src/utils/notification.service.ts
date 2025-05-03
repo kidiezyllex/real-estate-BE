@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ApiResponseType, createApiResponse } from 'src/utils/response.util';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { InvoicePayment } from '../invoice-payment/schema/invoice-payment.schema';
@@ -15,7 +16,7 @@ export class NotificationService {
   ) {}
 
   @Cron(CronExpression.EVERY_DAY_AT_8AM)
-  async sendPaymentReminders() {
+  async sendPaymentReminders(): Promise<ApiResponseType> {
     this.logger.debug('Đang gửi nhắc nhở thanh toán...');
     
     const now = new Date();
@@ -65,6 +66,15 @@ export class NotificationService {
     }
     
     this.logger.debug(`Đã gửi ${duePayments.length} thông báo nhắc nhở thanh toán`);
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: `Đã gửi ${duePayments.length} thông báo nhắc nhở thanh toán`,
+      data: {
+        notificationsSent: duePayments.length,
+        paymentIds: duePayments.map(payment => payment._id)
+      }
+    });
   }
 
   private async sendEmailNotification(email: string, payment: InvoicePayment) {

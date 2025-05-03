@@ -3,32 +3,32 @@ import { IsBoolean, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-va
 import { Types } from 'mongoose';
 
 export class CreateHomeDto {
-  @ApiProperty({ description: 'Địa chỉ căn hộ', example: '123 Đường ABC, Quận XYZ' })
+  @ApiProperty({ description: 'Địa chỉ căn hộ', example: '286 Hoàng Quốc Việt, Cầu Giấy, Hà Nội' })
   @IsNotEmpty()
   @IsString()
   address: string;
 
-  @ApiProperty({ description: 'ID của chủ nhà', example: '60d21b4667d0d8992e610c85' })
+  @ApiProperty({ description: 'ID của chủ nhà', example: '665b1c2f8f1b2a001e6e7a10' })
   @IsNotEmpty()
   @IsMongoId()
   homeOwnerId: Types.ObjectId;
 
-  @ApiPropertyOptional({ description: 'Quận/Huyện', example: 'Cầu Giấy' })
+  @ApiPropertyOptional({ description: 'Quận/Huyện', example: 'Nam Từ Liêm' })
   @IsOptional()
   @IsString()
   district?: string;
 
-  @ApiPropertyOptional({ description: 'Phường/Xã', example: 'Dịch Vọng' })
+  @ApiPropertyOptional({ description: 'Phường/Xã', example: 'Mỹ Đình 1' })
   @IsOptional()
   @IsString()
   ward?: string;
 
-  @ApiPropertyOptional({ description: 'Tòa nhà', example: 'Golden Palace' })
+  @ApiPropertyOptional({ description: 'Tòa nhà', example: 'Keangnam Landmark 72' })
   @IsOptional()
   @IsString()
   building?: string;
 
-  @ApiPropertyOptional({ description: 'Căn hộ số', example: 'A1205' })
+  @ApiPropertyOptional({ description: 'Căn hộ số', example: 'B2208' })
   @IsOptional()
   @IsString()
   apartmentNv?: string;
@@ -38,7 +38,7 @@ export class CreateHomeDto {
   @IsBoolean()
   active?: boolean;
 
-  @ApiPropertyOptional({ description: 'Ghi chú', example: 'Căn hộ cao cấp' })
+  @ApiPropertyOptional({ description: 'Ghi chú', example: 'Căn hộ view đẹp, đầy đủ nội thất' })
   @IsOptional()
   @IsString()
   note?: string;

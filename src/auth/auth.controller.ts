@@ -5,6 +5,7 @@ import { LoginUserDto } from './dto/auth.dto';
 import { ApiResponseType } from 'src/utils/response.util';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { ApiResponseDto } from 'src/utils/api-response.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -12,7 +13,11 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @ApiOperation({ summary: 'Login' })
-  @ApiResponse({ status: 200, description: 'User logged in.', type: User })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'User logged in.', 
+    type: ApiResponseDto 
+  })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiBody({ type: LoginUserDto })
   @Post('login')
@@ -21,7 +26,11 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'Register a new user account' })
-  @ApiResponse({ status: 201, description: 'User registered successfully' })
+  @ApiResponse({ 
+    status: 201, 
+    description: 'User registered successfully', 
+    type: ApiResponseDto 
+  })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiBody({ type: CreateUserDto })
   @Post('register')

@@ -4,7 +4,7 @@ export class CreateUserDto {
   @ApiProperty({
     name: 'name',
     description: 'The name of a user',
-    example: 'John Doe',
+    example: 'Nguyễn Văn An',
     required: true,
   })
   name: string;
@@ -12,7 +12,7 @@ export class CreateUserDto {
   @ApiProperty({
     name: 'email',
     description: 'The email of a user',
-    example: 'example@gmail.com',
+    example: 'nguyenvan.an@gmail.com',
     required: true,
   })
   email: string;
@@ -20,7 +20,7 @@ export class CreateUserDto {
   @ApiProperty({
     name: 'password',
     description: 'The password of a user',
-    example: 'Password@123',
+    example: 'NguyenVanAn@123',
     required: true,
   })
   password: string;
@@ -28,7 +28,7 @@ export class CreateUserDto {
   @ApiProperty({
     name: 'age',
     description: 'The age of a user',
-    example: 25,
+    example: 32,
     required: true,
   })
   age: number;

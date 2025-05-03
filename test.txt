@@ -1,0 +1,9 @@
+1. account
+{
+  "name": "kidiezyllex",
+  "email": "admin@gmail.com",
+  "password": "Admin123!",
+  "age": 25
+}
+
+2. Data test cho POST, PATCH

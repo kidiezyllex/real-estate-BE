@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ApiResponseType, createApiResponse } from 'src/utils/response.util';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { InvoicePayment } from '../invoice-payment/schema/invoice-payment.schema';
@@ -22,7 +23,7 @@ export class StatisticsService {
   ) {}
 
   // Thống kê tổng số căn hộ, khách hàng, chủ nhà, dịch vụ
-  async getGeneralStatistics() {
+  async getGeneralStatistics(): Promise<ApiResponseType> {
     const [homesCount, guestsCount, homeOwnersCount, servicesCount] = await Promise.all([
       this.homeModel.countDocuments(),
       this.guestModel.countDocuments(),
@@ -30,31 +31,43 @@ export class StatisticsService {
       this.serviceModel.countDocuments(),
     ]);
 
-    return {
+    const data = {
       homesCount,
       guestsCount,
       homeOwnersCount,
       servicesCount,
     };
+
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy thống kê tổng quan thành công',
+      data,
+    });
   }
 
   // Thống kê số lượng căn hộ đang cho thuê và đã thuê
-  async getHomeStatistics() {
+  async getHomeStatistics(): Promise<ApiResponseType> {
     const totalHomes = await this.homeModel.countDocuments();
     const rentedHomes = await this.homeModel.countDocuments({ status: 2 }); // Giả sử status 2 là đã thuê
     const availableHomes = await this.homeModel.countDocuments({ status: 1 }); // Giả sử status 1 là đang cho thuê
 
-    return {
+    const data = {
       totalHomes,
       rentedHomes,
       availableHomes,
       rentedPercentage: (rentedHomes / totalHomes) * 100,
       availablePercentage: (availableHomes / totalHomes) * 100,
     };
+
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy thống kê căn hộ thành công',
+      data,
+    });
   }
 
   // Thống kê doanh thu theo tháng
-  async getRevenueByMonth(year: number) {
+  async getRevenueByMonth(year: number): Promise<ApiResponseType> {
     const result = await this.invoicePaymentModel.aggregate([
       {
         $match: {
@@ -84,38 +97,47 @@ export class StatisticsService {
       monthlyRevenue[item._id - 1] = item.total;
     });
 
-    return {
+    const data = {
       year,
       monthlyRevenue,
     };
+
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy thống kê doanh thu theo tháng thành công',
+      data,
+    });
   }
 
-  // Thống kê số lượng hợp đồng theo trạng thái
-  async getContractsStatistics() {
+  async getContractsStatistics(): Promise<ApiResponseType> {
     const homeContracts = await this.homeContractModel.countDocuments();
     const serviceContracts = await this.serviceContractModel.countDocuments();
     
-    // Số lượng hợp đồng nhà đang hoạt động
     const activeHomeContracts = await this.homeContractModel.countDocuments({
       dateEnd: { $gte: new Date() },
     });
     
-    // Số lượng hợp đồng dịch vụ đang hoạt động
     const activeServiceContracts = await this.serviceContractModel.countDocuments({
       dateEnd: { $gte: new Date() },
     });
 
-    return {
+    const data = {
       totalContracts: homeContracts + serviceContracts,
       homeContracts,
       serviceContracts,
       activeHomeContracts,
       activeServiceContracts,
     };
+
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy thống kê hợp đồng thành công',
+      data,
+    });
   }
 
   // Thống kê số lượng thanh toán đúng hạn/trễ hạn
-  async getPaymentStatistics() {
+  async getPaymentStatistics(): Promise<ApiResponseType> {
     const totalPayments = await this.invoicePaymentModel.countDocuments({ statusPaym: 2 }); // Đã thanh toán
     
     // Số lượng thanh toán đúng hạn (ngày thanh toán thực tế <= ngày dự kiến)
@@ -127,17 +149,23 @@ export class StatisticsService {
     // Số lượng thanh toán trễ hạn
     const latePayments = totalPayments - onTimePayments;
 
-    return {
+    const data = {
       totalPayments,
       onTimePayments,
       latePayments,
       onTimePercentage: (onTimePayments / totalPayments) * 100,
       latePercentage: (latePayments / totalPayments) * 100,
     };
+
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy thống kê thanh toán thành công',
+      data,
+    });
   }
 
   // Thống kê thanh toán sắp đến hạn trong 7 ngày tới
-  async getDuePaymentsStatistics() {
+  async getDuePaymentsStatistics(): Promise<ApiResponseType> {
     const now = new Date();
     const sevenDaysLater = new Date();
     sevenDaysLater.setDate(now.getDate() + 7);
@@ -162,9 +190,15 @@ export class StatisticsService {
       },
     ]);
 
-    return {
+    const data = {
       duePayments,
       totalDueAmount: totalDueAmount.length > 0 ? totalDueAmount[0].total : 0,
     };
+
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy thống kê thanh toán sắp đến hạn thành công',
+      data,
+    });
   }
 } 

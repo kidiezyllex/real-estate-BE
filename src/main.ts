@@ -4,15 +4,10 @@ import { HttpExceptionFilter } from './exception-filter/http-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
   app.useGlobalFilters(new HttpExceptionFilter());
-
   app.enableCors();
   const config = new DocumentBuilder()
-    .setTitle('NestJS Template with MongoDB, Swagger and JWT Auth')
-    .setDescription(
-      'This is the template for NestJS with MongoDB, Swagger and JWT Auth',
-    )
+    .setTitle('Real Estate Management System (NestJS, MongoDB, Swagger and JWT Auth)')
     .setVersion('1.0')
     .addBearerAuth(
       {

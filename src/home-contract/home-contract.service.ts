@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ApiResponseType, createApiResponse } from 'src/utils/response.util';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { HomeContract, HomeContractDocument } from './schema/home-contract.schema';
@@ -15,7 +16,7 @@ export class HomeContractService {
     private homeService: HomeService,
   ) {}
 
-  async create(createHomeContractDto: CreateHomeContractDto): Promise<HomeContract> {
+  async create(createHomeContractDto: CreateHomeContractDto): Promise<ApiResponseType> {
     // Kiểm tra xem khách hàng có tồn tại hay không
     await this.guestService.findOne(createHomeContractDto.guestId.toString());
     
@@ -23,11 +24,17 @@ export class HomeContractService {
     await this.homeService.findOne(createHomeContractDto.homeId.toString());
     
     const createdHomeContract = new this.homeContractModel(createHomeContractDto);
-    return createdHomeContract.save();
+    const createResult = await createdHomeContract.save();
+    
+    return createApiResponse({
+      statusCode: 201,
+      message: 'Tạo hợp đồng nhà thành công',
+      data: createResult,
+    });
   }
 
-  async findAll(): Promise<HomeContract[]> {
-    return this.homeContractModel.find()
+  async findAll(): Promise<ApiResponseType> {
+    const contracts = await this.homeContractModel.find()
       .populate('guestId')
       .populate({
         path: 'homeId',
@@ -36,9 +43,15 @@ export class HomeContractService {
         },
       })
       .exec();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy danh sách hợp đồng nhà thành công',
+      data: contracts,
+    });
   }
 
-  async findOne(id: string): Promise<HomeContract> {
+  async findOne(id: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Hợp đồng nhà không tồn tại');
@@ -57,10 +70,14 @@ export class HomeContractService {
     if (!homeContract) {
       throw new NotFoundException('Hợp đồng nhà không tồn tại');
     }
-    return homeContract;
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy thông tin hợp đồng nhà thành công',
+      data: homeContract,
+    });
   }
 
-  async update(id: string, updateHomeContractDto: UpdateHomeContractDto): Promise<HomeContract> {
+  async update(id: string, updateHomeContractDto: UpdateHomeContractDto): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Hợp đồng nhà không tồn tại');
@@ -84,10 +101,14 @@ export class HomeContractService {
       throw new NotFoundException('Hợp đồng nhà không tồn tại');
     }
     
-    return updatedHomeContract;
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Cập nhật hợp đồng nhà thành công',
+      data: updatedHomeContract,
+    });
   }
 
-  async remove(id: string): Promise<HomeContract> {
+  async remove(id: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Hợp đồng nhà không tồn tại');
@@ -99,16 +120,20 @@ export class HomeContractService {
       throw new NotFoundException('Hợp đồng nhà không tồn tại');
     }
     
-    return deletedHomeContract;
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Xóa hợp đồng nhà thành công',
+      data: deletedHomeContract,
+    });
   }
 
-  async findByHome(homeId: string): Promise<HomeContract[]> {
+  async findByHome(homeId: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(homeId);
     if (!isValidId) {
       throw new NotFoundException('Căn hộ không tồn tại');
     }
     
-    return this.homeContractModel.find({ homeId })
+    const contracts = await this.homeContractModel.find({ homeId })
       .populate('guestId')
       .populate({
         path: 'homeId',
@@ -117,15 +142,21 @@ export class HomeContractService {
         },
       })
       .exec();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy danh sách hợp đồng theo căn hộ thành công',
+      data: contracts,
+    });
   }
 
-  async findByGuest(guestId: string): Promise<HomeContract[]> {
+  async findByGuest(guestId: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(guestId);
     if (!isValidId) {
       throw new NotFoundException('Khách hàng không tồn tại');
     }
     
-    return this.homeContractModel.find({ guestId })
+    const contracts = await this.homeContractModel.find({ guestId })
       .populate('guestId')
       .populate({
         path: 'homeId',
@@ -134,17 +165,26 @@ export class HomeContractService {
         },
       })
       .exec();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy danh sách hợp đồng theo khách hàng thành công',
+      data: contracts,
+    });
   }
 
-  async search(query: string): Promise<HomeContract[]> {
+  async search(query: string): Promise<ApiResponseType> {
     // Tìm các contract có khách hàng hoặc căn hộ phù hợp với từ khóa
-    const guests = await this.guestService.search(query);
-    const homes = await this.homeService.search(query);
+    const guestsResponse = await this.guestService.search(query);
+    const homesResponse = await this.homeService.search(query);
     
-    const guestIds = guests.map(guest => guest['_id']);
-    const homeIds = homes.map(home => home['_id']);
+    const guests = guestsResponse.data || [];
+    const homes = homesResponse.data || [];
     
-    return this.homeContractModel.find({
+    const guestIds = guests.map(guest => guest._id);
+    const homeIds = homes.map(home => home._id);
+    
+    const contracts = await this.homeContractModel.find({
       $or: [
         { guestId: { $in: guestIds } },
         { homeId: { $in: homeIds } },
@@ -158,5 +198,11 @@ export class HomeContractService {
         },
       })
       .exec();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Tìm kiếm hợp đồng nhà thành công',
+      data: contracts,
+    });
   }
 } 

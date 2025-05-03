@@ -4,7 +4,7 @@ export class UpdateProfileDto {
   @ApiProperty({
     name: 'name',
     description: 'Tên của người dùng',
-    example: 'John Doe',
+    example: 'Nguyễn Văn An',
     required: false,
   })
   name?: string;
@@ -12,7 +12,7 @@ export class UpdateProfileDto {
   @ApiProperty({
     name: 'age',
     description: 'Tuổi của người dùng',
-    example: 25,
+    example: 32,
     required: false,
   })
   age?: number;

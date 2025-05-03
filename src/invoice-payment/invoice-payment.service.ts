@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ApiResponseType, createApiResponse } from 'src/utils/response.util';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { InvoicePayment, InvoicePaymentDocument } from './schema/invoice-payment.schema';
@@ -19,7 +20,7 @@ export class InvoicePaymentService {
     private receiverService: ReceiverService,
   ) {}
 
-  async create(createInvoicePaymentDto: CreateInvoicePaymentDto): Promise<InvoicePayment> {
+  async create(createInvoicePaymentDto: CreateInvoicePaymentDto): Promise<ApiResponseType> {
     await this.homeService.findOne(createInvoicePaymentDto.homeId.toString());
     
     if (createInvoicePaymentDto.homeContractId) {
@@ -35,11 +36,17 @@ export class InvoicePaymentService {
     }
     
     const createdInvoicePayment = new this.invoicePaymentModel(createInvoicePaymentDto);
-    return createdInvoicePayment.save();
+    const createResult = await createdInvoicePayment.save();
+    
+    return createApiResponse({
+      statusCode: 201,
+      message: 'Tạo hóa đơn thanh toán thành công',
+      data: createResult,
+    });
   }
 
-  async findAll(): Promise<InvoicePayment[]> {
-    return this.invoicePaymentModel.find()
+  async findAll(): Promise<ApiResponseType> {
+    const payments = await this.invoicePaymentModel.find()
       .populate('homeContractId')
       .populate({
         path: 'homeId',
@@ -55,9 +62,15 @@ export class InvoicePaymentService {
       })
       .populate('receiverId')
       .exec();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy danh sách hóa đơn thanh toán thành công',
+      data: payments,
+    });
   }
 
-  async findOne(id: string): Promise<InvoicePayment> {
+  async findOne(id: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Hóa đơn thanh toán không tồn tại');
@@ -83,10 +96,14 @@ export class InvoicePaymentService {
     if (!invoicePayment) {
       throw new NotFoundException('Hóa đơn thanh toán không tồn tại');
     }
-    return invoicePayment;
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy thông tin hóa đơn thanh toán thành công',
+      data: invoicePayment,
+    });
   }
 
-  async update(id: string, updateInvoicePaymentDto: UpdateInvoicePaymentDto): Promise<InvoicePayment> {
+  async update(id: string, updateInvoicePaymentDto: UpdateInvoicePaymentDto): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Hóa đơn thanh toán không tồn tại');
@@ -116,10 +133,14 @@ export class InvoicePaymentService {
       throw new NotFoundException('Hóa đơn thanh toán không tồn tại');
     }
     
-    return updatedInvoicePayment;
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Cập nhật hóa đơn thanh toán thành công',
+      data: updatedInvoicePayment,
+    });
   }
 
-  async remove(id: string): Promise<InvoicePayment> {
+  async remove(id: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Hóa đơn thanh toán không tồn tại');
@@ -131,16 +152,20 @@ export class InvoicePaymentService {
       throw new NotFoundException('Hóa đơn thanh toán không tồn tại');
     }
     
-    return deletedInvoicePayment;
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Xóa hóa đơn thanh toán thành công',
+      data: deletedInvoicePayment,
+    });
   }
 
-  async findByHomeContract(homeContractId: string): Promise<InvoicePayment[]> {
+  async findByHomeContract(homeContractId: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(homeContractId);
     if (!isValidId) {
       throw new NotFoundException('Hợp đồng nhà không tồn tại');
     }
     
-    return this.invoicePaymentModel.find({ homeContractId })
+    const payments = await this.invoicePaymentModel.find({ homeContractId })
       .populate('homeContractId')
       .populate({
         path: 'homeId',
@@ -156,15 +181,21 @@ export class InvoicePaymentService {
       })
       .populate('receiverId')
       .exec();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy danh sách hóa đơn theo hợp đồng nhà thành công',
+      data: payments,
+    });
   }
 
-  async findByServiceContract(serviceContractId: string): Promise<InvoicePayment[]> {
+  async findByServiceContract(serviceContractId: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(serviceContractId);
     if (!isValidId) {
       throw new NotFoundException('Hợp đồng dịch vụ không tồn tại');
     }
     
-    return this.invoicePaymentModel.find({ serviceContractId })
+    const payments = await this.invoicePaymentModel.find({ serviceContractId })
       .populate('homeContractId')
       .populate({
         path: 'homeId',
@@ -180,15 +211,21 @@ export class InvoicePaymentService {
       })
       .populate('receiverId')
       .exec();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy danh sách hóa đơn theo hợp đồng dịch vụ thành công',
+      data: payments,
+    });
   }
 
-  async findByHome(homeId: string): Promise<InvoicePayment[]> {
+  async findByHome(homeId: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(homeId);
     if (!isValidId) {
       throw new NotFoundException('Căn hộ không tồn tại');
     }
     
-    return this.invoicePaymentModel.find({ homeId })
+    const payments = await this.invoicePaymentModel.find({ homeId })
       .populate('homeContractId')
       .populate({
         path: 'homeId',
@@ -204,18 +241,20 @@ export class InvoicePaymentService {
       })
       .populate('receiverId')
       .exec();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy danh sách hóa đơn theo căn hộ thành công',
+      data: payments,
+    });
   }
 
-  async findDuePayments(): Promise<InvoicePayment[]> {
-    // Lấy ngày hiện tại
+  async findDuePayments(): Promise<ApiResponseType> {
     const now = new Date();
-    
-    // Lấy ngày 7 ngày tới
     const sevenDaysLater = new Date();
     sevenDaysLater.setDate(now.getDate() + 7);
     
-    // Tìm các hóa đơn sắp đến hạn thanh toán và chưa thanh toán
-    return this.invoicePaymentModel.find({
+    const payments = await this.invoicePaymentModel.find({
       datePaymentExpec: { $gte: now, $lte: sevenDaysLater },
       statusPaym: 1, // Chưa thanh toán
     })
@@ -234,127 +273,132 @@ export class InvoicePaymentService {
       })
       .populate('receiverId')
       .exec();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy danh sách hóa đơn sắp đến hạn thành công',
+      data: payments,
+    });
   }
 
-  async updatePaymentStatus(id: string, statusPaym: number): Promise<InvoicePayment> {
+  async updatePaymentStatus(id: string, statusId: number): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Hóa đơn thanh toán không tồn tại');
     }
     
-    // Nếu đánh dấu là đã thanh toán, cập nhật ngày thanh toán thực tế
-    const update: any = { statusPaym };
-    if (statusPaym === 2) { // Đã thanh toán
-      update.datePaymentReal = new Date();
-    }
+    const invoicePayment = await this.invoicePaymentModel.findById(id).exec();
     
-    const updatedInvoicePayment = await this.invoicePaymentModel
-      .findByIdAndUpdate(id, update, { new: true })
-      .exec();
-    
-    if (!updatedInvoicePayment) {
+    if (!invoicePayment) {
       throw new NotFoundException('Hóa đơn thanh toán không tồn tại');
     }
     
-    return updatedInvoicePayment;
-  }
-
-  // Tạo các đợt thanh toán tự động dựa trên hợp đồng nhà
-  async generatePaymentsForHomeContract(homeContractId: string): Promise<InvoicePayment[]> {
-    const homeContract = await this.homeContractService.findOne(homeContractId);
+    // Cập nhật trạng thái thanh toán
+    invoicePayment.statusPaym = statusId;
     
-    // Lấy thông tin căn hộ và người nhận (nếu cần)
-    const homeId = homeContract.homeId;
-    
-    // Tính toán số đợt thanh toán dựa trên thời hạn và chu kỳ thanh toán
-    const totalPayments = Math.ceil(homeContract.duration / homeContract.payCycle);
-    
-    const createdPayments: InvoicePayment[] = [];
-    
-    for (let i = 0; i < totalPayments; i++) {
-      // Tính ngày bắt đầu và kết thúc của mỗi đợt thanh toán
-      const startDate = new Date(homeContract.dateStar);
-      startDate.setMonth(startDate.getMonth() + (i * homeContract.payCycle));
-      
-      const endDate = new Date(startDate);
-      endDate.setMonth(endDate.getMonth() + homeContract.payCycle);
-      
-      // Tính ngày dự kiến thanh toán (trước ngày kết thúc 7 ngày)
-      const expectedPaymentDate = new Date(endDate);
-      expectedPaymentDate.setDate(expectedPaymentDate.getDate() - 7);
-      
-      // Tính ngày nhắc thanh toán (trước ngày dự kiến thanh toán 7 ngày)
-      const remindDate = new Date(expectedPaymentDate);
-      remindDate.setDate(remindDate.getDate() - 7);
-      
-      const payment = new this.invoicePaymentModel({
-        homeContractId,
-        homeId,
-        type: 1, // Tiền thuê nhà
-        dateStar: startDate,
-        dateEnd: endDate,
-        datePaymentRemind: remindDate,
-        datePaymentExpec: expectedPaymentDate,
-        statusPaym: 1, // Chưa thanh toán
-        totalReceive: homeContract.renta, // Số tiền thuê nhà
-      });
-      
-      await payment.save();
-      createdPayments.push(payment);
+    // Nếu thanh toán thành công, cập nhật ngày thanh toán thực tế
+    if (statusId === 2) { // Giả sử 2 là trạng thái đã thanh toán
+      invoicePayment.datePaymentReal = new Date();
     }
     
-    return createdPayments;
+    await invoicePayment.save();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Cập nhật trạng thái thanh toán thành công',
+      data: invoicePayment,
+    });
   }
 
-  // Tạo các đợt thanh toán tự động dựa trên hợp đồng dịch vụ
-  async generatePaymentsForServiceContract(serviceContractId: string): Promise<InvoicePayment[]> {
-    const serviceContract = await this.serviceContractService.findOne(serviceContractId);
+  async generatePaymentsForHomeContract(homeContractId: string): Promise<ApiResponseType> {
+    const homeContractResponse = await this.homeContractService.findOne(homeContractId);
+    const homeContract = homeContractResponse.data;
     
-    // Lấy thông tin căn hộ
-    const homeId = serviceContract.homeId;
-    
-    // Tính toán số đợt thanh toán dựa trên thời hạn và chu kỳ thanh toán
-    const totalPayments = Math.ceil(serviceContract.duration / serviceContract.payCycle);
-    
-    const createdPayments: InvoicePayment[] = [];
-    
-    for (let i = 0; i < totalPayments; i++) {
-      // Tính ngày bắt đầu và kết thúc của mỗi đợt thanh toán
-      const startDate = new Date(serviceContract.dateStar);
-      startDate.setMonth(startDate.getMonth() + (i * serviceContract.payCycle));
-      
-      const endDate = new Date(startDate);
-      endDate.setMonth(endDate.getMonth() + serviceContract.payCycle);
-      
-      // Kiểm tra nếu vượt quá ngày kết thúc của hợp đồng
-      if (endDate > new Date(serviceContract.dateEnd)) {
-        break;
-      }
-      
-      // Tính ngày dự kiến thanh toán (trước ngày kết thúc 7 ngày)
-      const expectedPaymentDate = new Date(endDate);
-      expectedPaymentDate.setDate(expectedPaymentDate.getDate() - 7);
-      
-      // Tính ngày nhắc thanh toán (trước ngày dự kiến thanh toán 7 ngày)
-      const remindDate = new Date(expectedPaymentDate);
-      remindDate.setDate(remindDate.getDate() - 7);
-      
-      const payment = new this.invoicePaymentModel({
-        serviceContractId,
-        homeId,
-        type: 2, // Tiền dịch vụ
-        dateStar: startDate,
-        dateEnd: endDate,
-        datePaymentRemind: remindDate,
-        datePaymentExpec: expectedPaymentDate,
-        statusPaym: 1, // Chưa thanh toán
-        totalReceive: serviceContract.unitCost, // Số tiền dịch vụ
-      });
-      
-      await payment.save();
-      createdPayments.push(payment);
+    if (!homeContract) {
+      throw new NotFoundException('Hợp đồng nhà không tồn tại');
     }
     
-    return createdPayments;
+    // Tạo các khoản thanh toán dựa trên thông tin hợp đồng
+    const startDate = new Date(homeContract.dateStart);
+    const endDate = new Date(homeContract.dateEnd);
+    
+    // Tính số tháng giữa ngày bắt đầu và kết thúc
+    const months = (endDate.getFullYear() - startDate.getFullYear()) * 12 + 
+                  (endDate.getMonth() - startDate.getMonth());
+    
+    const paymentPromises = [];
+    
+    for (let i = 0; i <= months; i++) {
+      const paymentDate = new Date(startDate);
+      paymentDate.setMonth(paymentDate.getMonth() + i);
+      
+      // Tạo thông tin hóa đơn
+      const payment = new this.invoicePaymentModel({
+        homeContractId: homeContract._id,
+        homeId: homeContract.homeId,
+        dateCreate: new Date(),
+        datePaymentExpec: paymentDate,
+        datePaymentRemind: new Date(paymentDate.getTime() - 7 * 24 * 60 * 60 * 1000), // 7 ngày trước hạn
+        statusPaym: 1, // Chưa thanh toán
+        totalReceive: homeContract.price,
+        note: `Hóa đơn thuê nhà tháng ${paymentDate.getMonth() + 1}/${paymentDate.getFullYear()}`,
+      });
+      
+      paymentPromises.push(payment.save());
+    }
+    
+    const createdPayments = await Promise.all(paymentPromises);
+    
+    return createApiResponse({
+      statusCode: 201,
+      message: 'Tạo các hóa đơn từ hợp đồng nhà thành công',
+      data: createdPayments,
+    });
+  }
+
+  async generatePaymentsForServiceContract(serviceContractId: string): Promise<ApiResponseType> {
+    const serviceContractResponse = await this.serviceContractService.findOne(serviceContractId);
+    const serviceContract = serviceContractResponse.data;
+    
+    if (!serviceContract) {
+      throw new NotFoundException('Hợp đồng dịch vụ không tồn tại');
+    }
+    
+    // Tạo các khoản thanh toán dựa trên thông tin hợp đồng dịch vụ
+    const startDate = new Date(serviceContract.dateStart);
+    const endDate = new Date(serviceContract.dateEnd);
+    
+    // Tính số tháng giữa ngày bắt đầu và kết thúc
+    const months = (endDate.getFullYear() - startDate.getFullYear()) * 12 + 
+                  (endDate.getMonth() - startDate.getMonth());
+    
+    const paymentPromises = [];
+    
+    for (let i = 0; i <= months; i++) {
+      const paymentDate = new Date(startDate);
+      paymentDate.setMonth(paymentDate.getMonth() + i);
+      
+      // Tạo thông tin hóa đơn
+      const payment = new this.invoicePaymentModel({
+        serviceContractId: serviceContract._id,
+        homeId: serviceContract.homeId,
+        dateCreate: new Date(),
+        datePaymentExpec: paymentDate,
+        datePaymentRemind: new Date(paymentDate.getTime() - 7 * 24 * 60 * 60 * 1000), // 7 ngày trước hạn
+        statusPaym: 1, // Chưa thanh toán
+        totalReceive: serviceContract.price,
+        note: `Hóa đơn dịch vụ ${serviceContract.serviceId.name} tháng ${paymentDate.getMonth() + 1}/${paymentDate.getFullYear()}`,
+      });
+      
+      paymentPromises.push(payment.save());
+    }
+    
+    const createdPayments = await Promise.all(paymentPromises);
+    
+    return createApiResponse({
+      statusCode: 201,
+      message: 'Tạo các hóa đơn từ hợp đồng dịch vụ thành công',
+      data: createdPayments,
+    });
   }
 } 

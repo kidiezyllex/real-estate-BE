@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ApiResponseType, createApiResponse } from 'src/utils/response.util';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Service, ServiceDocument } from './schema/service.schema';
@@ -11,16 +12,28 @@ export class ServiceService {
     @InjectModel(Service.name) private serviceModel: Model<ServiceDocument>,
   ) {}
 
-  async create(createServiceDto: CreateServiceDto): Promise<Service> {
+  async create(createServiceDto: CreateServiceDto): Promise<ApiResponseType> {
     const createdService = new this.serviceModel(createServiceDto);
-    return createdService.save();
+    const createResult = await createdService.save();
+    
+    return createApiResponse({
+      statusCode: 201,
+      message: 'Tạo dịch vụ thành công',
+      data: createResult,
+    });
   }
 
-  async findAll(): Promise<Service[]> {
-    return this.serviceModel.find().exec();
+  async findAll(): Promise<ApiResponseType> {
+    const findAllResult = await this.serviceModel.find().exec();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy danh sách dịch vụ thành công',
+      data: findAllResult,
+    });
   }
 
-  async findOne(id: string): Promise<Service> {
+  async findOne(id: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Dịch vụ không tồn tại');
@@ -30,10 +43,14 @@ export class ServiceService {
     if (!service) {
       throw new NotFoundException('Dịch vụ không tồn tại');
     }
-    return service;
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy thông tin dịch vụ thành công',
+      data: service,
+    });
   }
 
-  async update(id: string, updateServiceDto: UpdateServiceDto): Promise<Service> {
+  async update(id: string, updateServiceDto: UpdateServiceDto): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Dịch vụ không tồn tại');
@@ -47,10 +64,14 @@ export class ServiceService {
       throw new NotFoundException('Dịch vụ không tồn tại');
     }
     
-    return updatedService;
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Cập nhật dịch vụ thành công',
+      data: updatedService,
+    });
   }
 
-  async remove(id: string): Promise<Service> {
+  async remove(id: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Dịch vụ không tồn tại');
@@ -62,15 +83,25 @@ export class ServiceService {
       throw new NotFoundException('Dịch vụ không tồn tại');
     }
     
-    return deletedService;
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Xóa dịch vụ thành công',
+      data: deletedService,
+    });
   }
 
-  async search(query: string): Promise<Service[]> {
-    return this.serviceModel.find({
+  async search(query: string): Promise<ApiResponseType> {
+    const results = await this.serviceModel.find({
       $or: [
         { name: { $regex: query, $options: 'i' } },
         { description: { $regex: query, $options: 'i' } },
       ],
     }).exec();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Tìm kiếm dịch vụ thành công',
+      data: results,
+    });
   }
 } 

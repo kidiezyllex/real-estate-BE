@@ -1,14 +1,15 @@
 export interface ApiResponseType {
-  statusCode?: number;
-  message?: string;
-  data?: any;
+  statusCode: number;
+  message: string;
+  data: any;
 }
 
-export function createApiResponse(params: ApiResponseType) {
-  const response: ApiResponseType = {};
-
-  if (params.statusCode !== undefined) response.statusCode = params.statusCode;
-  if (params.message !== undefined) response.message = params.message;
-  if (params.data !== undefined) response.data = params.data;
+export function createApiResponse(params: Partial<ApiResponseType>): ApiResponseType {
+  const response: ApiResponseType = {
+    statusCode: params.statusCode !== undefined ? params.statusCode : 200,
+    message: params.message !== undefined ? params.message : 'Success',
+    data: params.data !== undefined ? params.data : null,
+  };
+  
   return response;
 }

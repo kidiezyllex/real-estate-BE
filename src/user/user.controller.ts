@@ -24,6 +24,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtGuard } from 'src/auth/jwt-auth.guard';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ChangePasswordDto } from 'src/auth/dto/change-password.dto';
+import { ApiResponseDto } from 'src/utils/api-response.dto';
 
 @ApiTags('user')
 @Controller('user')
@@ -34,6 +35,7 @@ export class UserController {
   @ApiResponse({
     status: 201,
     description: 'The user has been successfully created.',
+    type: ApiResponseDto
   })
   @ApiResponse({ status: 400, description: 'Bad request.' })
   @Post('register')
@@ -47,19 +49,21 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'User profile retrieved successfully.',
+    type: ApiResponseDto
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @UseGuards(JwtGuard)
   @ApiBearerAuth('access-token')
   @Get('profile')
   async getProfile(@Request() req): Promise<ApiResponseType> {
-    return this.userService.getProfile(req.user.sub);
+    return this.userService.getProfile(req.user.id);
   }
 
   @ApiOperation({ summary: 'Update user profile' })
   @ApiResponse({
     status: 200,
     description: 'User profile updated successfully.',
+    type: ApiResponseDto
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @UseGuards(JwtGuard)
@@ -69,13 +73,14 @@ export class UserController {
     @Request() req,
     @Body() updateProfileDto: UpdateProfileDto,
   ): Promise<ApiResponseType> {
-    return this.userService.updateProfile(req.user.sub, updateProfileDto);
+    return this.userService.updateProfile(req.user.id, updateProfileDto);
   }
 
   @ApiOperation({ summary: 'Change user password' })
   @ApiResponse({
     status: 200,
     description: 'Password changed successfully.',
+    type: ApiResponseDto
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @UseGuards(JwtGuard)
@@ -85,13 +90,14 @@ export class UserController {
     @Request() req,
     @Body() changePasswordDto: ChangePasswordDto,
   ): Promise<ApiResponseType> {
-    return this.userService.changePassword(req.user.sub, changePasswordDto);
+    return this.userService.changePassword(req.user.id, changePasswordDto);
   }
 
   @ApiOperation({ summary: 'Fetch users by name' })
   @ApiResponse({
     status: 200,
     description: 'Users fetched successfully.',
+    type: ApiResponseDto
   })
   @UseGuards(JwtGuard)
   @ApiBearerAuth('access-token')
@@ -108,6 +114,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully updated.',
+    type: ApiResponseDto
   })
   @ApiResponse({ status: 400, description: 'Bad request.' })
   @Put('/:id')
@@ -122,6 +129,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully deleted.',
+    type: ApiResponseDto
   })
   @ApiResponse({ status: 400, description: 'Bad request.' })
   @Delete('/:id')

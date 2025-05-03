@@ -4,6 +4,7 @@ import { Model, Types } from 'mongoose';
 import { Guest, GuestDocument } from './schema/guest.schema';
 import { CreateGuestDto } from './dto/create-guest.dto';
 import { UpdateGuestDto } from './dto/update-guest.dto';
+import { ApiResponseType, createApiResponse } from 'src/utils/response.util';
 
 @Injectable()
 export class GuestService {
@@ -11,16 +12,26 @@ export class GuestService {
     @InjectModel(Guest.name) private guestModel: Model<GuestDocument>,
   ) {}
 
-  async create(createGuestDto: CreateGuestDto): Promise<Guest> {
+  async create(createGuestDto: CreateGuestDto): Promise<ApiResponseType> {
     const createdGuest = new this.guestModel(createGuestDto);
-    return createdGuest.save();
+    const result = await createdGuest.save();
+    return createApiResponse({
+      statusCode: 201,
+      message: 'Tạo khách hàng thành công',
+      data: result,
+    });
   }
 
-  async findAll(): Promise<Guest[]> {
-    return this.guestModel.find().exec();
+  async findAll(): Promise<ApiResponseType> {
+    const guests = await this.guestModel.find().exec();
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy danh sách khách hàng thành công',
+      data: guests,
+    });
   }
 
-  async findOne(id: string): Promise<Guest> {
+  async findOne(id: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Khách hàng không tồn tại');
@@ -30,10 +41,15 @@ export class GuestService {
     if (!guest) {
       throw new NotFoundException('Khách hàng không tồn tại');
     }
-    return guest;
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Lấy thông tin khách hàng thành công',
+      data: guest,
+    });
   }
 
-  async update(id: string, updateGuestDto: UpdateGuestDto): Promise<Guest> {
+  async update(id: string, updateGuestDto: UpdateGuestDto): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Khách hàng không tồn tại');
@@ -47,10 +63,14 @@ export class GuestService {
       throw new NotFoundException('Khách hàng không tồn tại');
     }
     
-    return updatedGuest;
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Cập nhật thông tin khách hàng thành công',
+      data: updatedGuest,
+    });
   }
 
-  async remove(id: string): Promise<Guest> {
+  async remove(id: string): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Khách hàng không tồn tại');
@@ -62,16 +82,26 @@ export class GuestService {
       throw new NotFoundException('Khách hàng không tồn tại');
     }
     
-    return deletedGuest;
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Xóa khách hàng thành công',
+      data: deletedGuest,
+    });
   }
 
-  async search(query: string): Promise<Guest[]> {
-    return this.guestModel.find({
+  async search(query: string): Promise<ApiResponseType> {
+    const guests = await this.guestModel.find({
       $or: [
         { fullname: { $regex: query, $options: 'i' } },
         { phone: { $regex: query, $options: 'i' } },
         { email: { $regex: query, $options: 'i' } },
       ],
     }).exec();
+    
+    return createApiResponse({
+      statusCode: 200,
+      message: 'Tìm kiếm khách hàng thành công',
+      data: guests,
+    });
   }
 } 
