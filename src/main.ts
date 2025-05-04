@@ -4,6 +4,7 @@ import { HttpExceptionFilter } from './exception-filter/http-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api/v1');
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableCors();
   const config = new DocumentBuilder()

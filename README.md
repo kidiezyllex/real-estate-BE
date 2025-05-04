@@ -34,7 +34,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
 ### 1. Authentication API
 
 #### Đăng nhập
-- **Endpoint:** `POST /auth/login`
+- **Endpoint:** `POST /api/v1/auth/login`
 - **Request:**
   ```json
   {
@@ -60,7 +60,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Đăng ký
-- **Endpoint:** `POST /auth/register`
+- **Endpoint:** `POST /api/v1/auth/register`
 - **Request:**
   ```json
   {
@@ -89,7 +89,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
 ### 2. User API
 
 #### Lấy thông tin người dùng
-- **Endpoint:** `GET /user/profile`
+- **Endpoint:** `GET /api/v1/user/profile`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -106,7 +106,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Cập nhật thông tin người dùng
-- **Endpoint:** `PUT /user/update-profile`
+- **Endpoint:** `PUT /api/v1/user/update-profile`
 - **Headers:** `Authorization: Bearer token`
 - **Request:**
   ```json
@@ -132,7 +132,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
 ### 3. Quản lý Căn hộ
 
 #### Lấy danh sách tất cả căn hộ
-- **Endpoint:** `GET /homes`
+- **Endpoint:** `GET /api/v1/homes`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -159,7 +159,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Lấy danh sách căn hộ đang cho thuê
-- **Endpoint:** `GET /homes/available`
+- **Endpoint:** `GET /api/v1/homes/available`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -184,7 +184,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Tìm kiếm căn hộ
-- **Endpoint:** `GET /homes/search?q=`
+- **Endpoint:** `GET /api/v1/homes/search?q=`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `q` (từ khóa tìm kiếm)
 - **Response:**
@@ -210,7 +210,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Lấy danh sách căn hộ theo chủ nhà
-- **Endpoint:** `GET /homes/homeowner/:homeOwnerId`
+- **Endpoint:** `GET /api/v1/homes/homeowner/:homeOwnerId`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `homeOwnerId` (MongoDB ObjectId)
 - **Response:**
@@ -236,7 +236,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xem chi tiết căn hộ
-- **Endpoint:** `GET /homes/:id`
+- **Endpoint:** `GET /api/v1/homes/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Response:**
@@ -266,7 +266,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Tạo căn hộ mới
-- **Endpoint:** `POST /homes`
+- **Endpoint:** `POST /api/v1/homes`
 - **Headers:** `Authorization: Bearer token`
 - **Request:**
   ```json
@@ -307,7 +307,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Cập nhật thông tin căn hộ
-- **Endpoint:** `PATCH /homes/:id`
+- **Endpoint:** `PATCH /api/v1/homes/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Request:**
   ```json
@@ -333,7 +333,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xóa căn hộ
-- **Endpoint:** `DELETE /homes/:id`
+- **Endpoint:** `DELETE /api/v1/homes/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -350,7 +350,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
 ### 4. Quản lý Khách hàng
 
 #### Lấy danh sách khách hàng
-- **Endpoint:** `GET /guests`
+- **Endpoint:** `GET /api/v1/guests`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -377,7 +377,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Tìm kiếm khách hàng
-- **Endpoint:** `GET /guests/search?q=`
+- **Endpoint:** `GET /api/v1/guests/search?q=`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `q` (từ khóa tìm kiếm)
 - **Response:**
@@ -398,7 +398,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xem chi tiết khách hàng
-- **Endpoint:** `GET /guests/:id`
+- **Endpoint:** `GET /api/v1/guests/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Response:**
@@ -424,7 +424,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Tạo khách hàng mới
-- **Endpoint:** `POST /guests`
+- **Endpoint:** `POST /api/v1/guests`
 - **Headers:** `Authorization: Bearer token`
 - **Request:**
   ```json
@@ -463,7 +463,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Cập nhật thông tin khách hàng
-- **Endpoint:** `PATCH /guests/:id`
+- **Endpoint:** `PATCH /api/v1/guests/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Request:**
@@ -490,7 +490,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xóa khách hàng
-- **Endpoint:** `DELETE /guests/:id`
+- **Endpoint:** `DELETE /api/v1/guests/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Response:**
@@ -506,7 +506,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xem danh sách hợp đồng của khách hàng
-- **Endpoint:** `GET /home-contracts/guest/:guestId`
+- **Endpoint:** `GET /api/v1/home-contracts/guest/:guestId`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `guestId` (MongoDB ObjectId)
 - **Response:**
@@ -537,7 +537,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
 ### 5. Quản lý Chủ nhà
 
 #### Lấy danh sách chủ nhà
-- **Endpoint:** `GET /home-owners`
+- **Endpoint:** `GET /api/v1/home-owners`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -565,7 +565,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Tìm kiếm chủ nhà
-- **Endpoint:** `GET /home-owners/search?q=`
+- **Endpoint:** `GET /api/v1/home-owners/search?q=`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `q` (từ khóa tìm kiếm)
 - **Response:**
@@ -585,7 +585,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xem chi tiết chủ nhà
-- **Endpoint:** `GET /home-owners/:id`
+- **Endpoint:** `GET /api/v1/home-owners/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Response:**
@@ -612,7 +612,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Tạo chủ nhà mới
-- **Endpoint:** `POST /home-owners`
+- **Endpoint:** `POST /api/v1/home-owners`
 - **Headers:** `Authorization: Bearer token`
 - **Request:**
   ```json
@@ -653,7 +653,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Cập nhật thông tin chủ nhà
-- **Endpoint:** `PATCH /home-owners/:id`
+- **Endpoint:** `PATCH /api/v1/home-owners/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Request:**
@@ -680,7 +680,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xóa chủ nhà
-- **Endpoint:** `DELETE /home-owners/:id`
+- **Endpoint:** `DELETE /api/v1/home-owners/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Response:**
@@ -698,7 +698,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
 ### 6. Quản lý Hợp đồng nhà
 
 #### Lấy danh sách hợp đồng
-- **Endpoint:** `GET /home-contracts`
+- **Endpoint:** `GET /api/v1/home-contracts`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -724,7 +724,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Tìm kiếm hợp đồng
-- **Endpoint:** `GET /home-contracts/search?q=`
+- **Endpoint:** `GET /api/v1/home-contracts/search?q=`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `q` (từ khóa tìm kiếm)
 - **Response:**
@@ -756,7 +756,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xem danh sách hợp đồng theo căn hộ
-- **Endpoint:** `GET /home-contracts/home/:homeId`
+- **Endpoint:** `GET /api/v1/home-contracts/home/:homeId`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `homeId` (MongoDB ObjectId)
 - **Response:**
@@ -781,7 +781,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xem chi tiết hợp đồng
-- **Endpoint:** `GET /home-contracts/:id`
+- **Endpoint:** `GET /api/v1/home-contracts/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Response:**
@@ -821,7 +821,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Tạo hợp đồng nhà mới
-- **Endpoint:** `POST /home-contracts`
+- **Endpoint:** `POST /api/v1/home-contracts`
 - **Headers:** `Authorization: Bearer token`
 - **Request:**
   ```json
@@ -858,7 +858,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Cập nhật thông tin hợp đồng
-- **Endpoint:** `PATCH /home-contracts/:id`
+- **Endpoint:** `PATCH /api/v1/home-contracts/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Request:**
@@ -887,7 +887,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xóa hợp đồng
-- **Endpoint:** `DELETE /home-contracts/:id`
+- **Endpoint:** `DELETE /api/v1/home-contracts/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Response:**
@@ -905,7 +905,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
 ### 7. Quản lý Hợp đồng dịch vụ
 
 #### Lấy danh sách hợp đồng dịch vụ
-- **Endpoint:** `GET /service-contracts`
+- **Endpoint:** `GET /api/v1/service-contracts`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -932,7 +932,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xem danh sách hợp đồng dịch vụ theo căn hộ
-- **Endpoint:** `GET /service-contracts/home/:homeId`
+- **Endpoint:** `GET /api/v1/service-contracts/home/:homeId`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `homeId` (MongoDB ObjectId)
 - **Response:**
@@ -958,7 +958,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xem danh sách hợp đồng dịch vụ theo khách hàng
-- **Endpoint:** `GET /service-contracts/guest/:guestId`
+- **Endpoint:** `GET /api/v1/service-contracts/guest/:guestId`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `guestId` (MongoDB ObjectId)
 - **Response:**
@@ -984,7 +984,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xem danh sách hợp đồng dịch vụ theo hợp đồng nhà
-- **Endpoint:** `GET /service-contracts/homecontract/:homeContractId`
+- **Endpoint:** `GET /api/v1/service-contracts/homecontract/:homeContractId`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `homeContractId` (MongoDB ObjectId)
 - **Response:**
@@ -1010,7 +1010,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xem danh sách hợp đồng dịch vụ theo dịch vụ
-- **Endpoint:** `GET /service-contracts/service/:serviceId`
+- **Endpoint:** `GET /api/v1/service-contracts/service/:serviceId`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `serviceId` (MongoDB ObjectId)
 - **Response:**
@@ -1036,7 +1036,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xem chi tiết hợp đồng dịch vụ
-- **Endpoint:** `GET /service-contracts/:id`
+- **Endpoint:** `GET /api/v1/service-contracts/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Response:**
@@ -1072,7 +1072,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Tạo hợp đồng dịch vụ mới
-- **Endpoint:** `POST /service-contracts`
+- **Endpoint:** `POST /api/v1/service-contracts`
 - **Headers:** `Authorization: Bearer token`
 - **Request:**
   ```json
@@ -1110,7 +1110,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Cập nhật thông tin hợp đồng dịch vụ
-- **Endpoint:** `PATCH /service-contracts/:id`
+- **Endpoint:** `PATCH /api/v1/service-contracts/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Request:**
@@ -1139,7 +1139,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xóa hợp đồng dịch vụ
-- **Endpoint:** `DELETE /service-contracts/:id`
+- **Endpoint:** `DELETE /api/v1/service-contracts/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Response:**
@@ -1157,7 +1157,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
 ### 8. Thống kê
 
 #### Thống kê tổng quan
-- **Endpoint:** `GET /statistics/general`
+- **Endpoint:** `GET /api/v1/statistics/general`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -1174,7 +1174,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Thống kê doanh thu theo tháng
-- **Endpoint:** `GET /statistics/revenue?year=2023`
+- **Endpoint:** `GET /api/v1/statistics/revenue?year=2023`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -1199,7 +1199,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Thống kê căn hộ
-- **Endpoint:** `GET /statistics/homes`
+- **Endpoint:** `GET /api/v1/statistics/homes`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -1215,7 +1215,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Thống kê hợp đồng
-- **Endpoint:** `GET /statistics/contracts`
+- **Endpoint:** `GET /api/v1/statistics/contracts`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -1233,7 +1233,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Thống kê thanh toán
-- **Endpoint:** `GET /statistics/payments`
+- **Endpoint:** `GET /api/v1/statistics/payments`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -1250,7 +1250,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Thống kê thanh toán sắp đến hạn
-- **Endpoint:** `GET /statistics/due-payments`
+- **Endpoint:** `GET /api/v1/statistics/due-payments`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -1279,7 +1279,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
 ### 9. Quản lý Người nhận
 
 #### Lấy danh sách người nhận
-- **Endpoint:** `GET /receivers`
+- **Endpoint:** `GET /api/v1/receivers`
 - **Headers:** `Authorization: Bearer token`
 - **Response:**
   ```json
@@ -1303,7 +1303,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Tìm kiếm người nhận
-- **Endpoint:** `GET /receivers/search?q=`
+- **Endpoint:** `GET /api/v1/receivers/search?q=`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `q` (từ khóa tìm kiếm)
 - **Response:**
@@ -1323,7 +1323,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xem chi tiết người nhận
-- **Endpoint:** `GET /receivers/:id`
+- **Endpoint:** `GET /api/v1/receivers/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Response:**
@@ -1346,7 +1346,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Tạo người nhận mới
-- **Endpoint:** `POST /receivers`
+- **Endpoint:** `POST /api/v1/receivers`
 - **Headers:** `Authorization: Bearer token`
 - **Request:**
   ```json
@@ -1379,7 +1379,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Cập nhật thông tin người nhận
-- **Endpoint:** `PATCH /receivers/:id`
+- **Endpoint:** `PATCH /api/v1/receivers/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Request:**
@@ -1404,7 +1404,7 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
   ```
 
 #### Xóa người nhận
-- **Endpoint:** `DELETE /receivers/:id`
+- **Endpoint:** `DELETE /api/v1/receivers/:id`
 - **Headers:** `Authorization: Bearer token`
 - **Params:** `id` (MongoDB ObjectId)
 - **Response:**
@@ -1444,58 +1444,58 @@ Dưới đây là danh sách đầy đủ các API trong hệ thống Bất đ�
 Tất cả các API trong hệ thống:
 
 ### Quản lý Người dùng
-- `POST /auth/login` - Đăng nhập
-- `POST /auth/register` - Đăng ký
-- `GET /user/profile` - Lấy thông tin người dùng
-- `PUT /user/update-profile` - Cập nhật thông tin người dùng
+- `POST /api/v1/auth/login` - Đăng nhập
+- `POST /api/v1/auth/register` - Đăng ký
+- `GET /api/v1/user/profile` - Lấy thông tin người dùng
+- `PUT /api/v1/user/update-profile` - Cập nhật thông tin người dùng
 
 ### Quản lý Căn hộ
-- `GET /homes` - Lấy danh sách căn hộ
-- `GET /homes/available` - Lấy danh sách căn hộ đang cho thuê
-- `GET /homes/search?q=` - Tìm kiếm căn hộ
-- `GET /homes/homeowner/:homeOwnerId` - Lấy danh sách căn hộ theo chủ nhà
-- `GET /homes/:id` - Lấy thông tin căn hộ theo ID
-- `POST /homes` - Tạo căn hộ mới
-- `PATCH /homes/:id` - Cập nhật thông tin căn hộ
-- `DELETE /homes/:id` - Xóa căn hộ
+- `GET /api/v1/homes` - Lấy danh sách căn hộ
+- `GET /api/v1/homes/available` - Lấy danh sách căn hộ đang cho thuê
+- `GET /api/v1/homes/search?q=` - Tìm kiếm căn hộ
+- `GET /api/v1/homes/homeowner/:homeOwnerId` - Lấy danh sách căn hộ theo chủ nhà
+- `GET /api/v1/homes/:id` - Lấy thông tin căn hộ theo ID
+- `POST /api/v1/homes` - Tạo căn hộ mới
+- `PATCH /api/v1/homes/:id` - Cập nhật thông tin căn hộ
+- `DELETE /api/v1/homes/:id` - Xóa căn hộ
 
 ### Quản lý Khách hàng
-- `GET /guests` - Lấy danh sách khách hàng
-- `GET /guests/search?q=` - Tìm kiếm khách hàng
-- `GET /guests/:id` - Lấy thông tin khách hàng theo ID
-- `POST /guests` - Tạo khách hàng mới
-- `PATCH /guests/:id` - Cập nhật thông tin khách hàng
-- `DELETE /guests/:id` - Xóa khách hàng
-- `GET /home-contracts/guest/:guestId` - Lấy danh sách hợp đồng của khách hàng
+- `GET /api/v1/guests` - Lấy danh sách khách hàng
+- `GET /api/v1/guests/search?q=` - Tìm kiếm khách hàng
+- `GET /api/v1/guests/:id` - Lấy thông tin khách hàng theo ID
+- `POST /api/v1/guests` - Tạo khách hàng mới
+- `PATCH /api/v1/guests/:id` - Cập nhật thông tin khách hàng
+- `DELETE /api/v1/guests/:id` - Xóa khách hàng
+- `GET /api/v1/home-contracts/guest/:guestId` - Lấy danh sách hợp đồng của khách hàng
 
 ### Quản lý Chủ nhà
-- `GET /home-owners` - Lấy danh sách chủ nhà
-- `GET /home-owners/search?q=` - Tìm kiếm chủ nhà
-- `GET /home-owners/:id` - Lấy thông tin chủ nhà theo ID
-- `POST /home-owners` - Tạo chủ nhà mới
-- `PATCH /home-owners/:id` - Cập nhật thông tin chủ nhà
-- `DELETE /home-owners/:id` - Xóa chủ nhà
+- `GET /api/v1/home-owners` - Lấy danh sách chủ nhà
+- `GET /api/v1/home-owners/search?q=` - Tìm kiếm chủ nhà
+- `GET /api/v1/home-owners/:id` - Lấy thông tin chủ nhà theo ID
+- `POST /api/v1/home-owners` - Tạo chủ nhà mới
+- `PATCH /api/v1/home-owners/:id` - Cập nhật thông tin chủ nhà
+- `DELETE /api/v1/home-owners/:id` - Xóa chủ nhà
 
 ### Quản lý Hợp đồng nhà
-- `GET /home-contracts` - Lấy danh sách hợp đồng
-- `GET /home-contracts/search?q=` - Tìm kiếm hợp đồng
-- `GET /home-contracts/home/:homeId` - Lấy danh sách hợp đồng theo căn hộ
-- `GET /home-contracts/guest/:guestId` - Lấy danh sách hợp đồng theo khách hàng
-- `GET /home-contracts/:id` - Lấy thông tin hợp đồng theo ID
-- `POST /home-contracts` - Tạo hợp đồng mới
-- `PATCH /home-contracts/:id` - Cập nhật thông tin hợp đồng
-- `DELETE /home-contracts/:id` - Xóa hợp đồng
+- `GET /api/v1/home-contracts` - Lấy danh sách hợp đồng
+- `GET /api/v1/home-contracts/search?q=` - Tìm kiếm hợp đồng
+- `GET /api/v1/home-contracts/home/:homeId` - Lấy danh sách hợp đồng theo căn hộ
+- `GET /api/v1/home-contracts/guest/:guestId` - Lấy danh sách hợp đồng theo khách hàng
+- `GET /api/v1/home-contracts/:id` - Lấy thông tin hợp đồng theo ID
+- `POST /api/v1/home-contracts` - Tạo hợp đồng mới
+- `PATCH /api/v1/home-contracts/:id` - Cập nhật thông tin hợp đồng
+- `DELETE /api/v1/home-contracts/:id` - Xóa hợp đồng
 
 ### Quản lý Hợp đồng dịch vụ
-- `GET /service-contracts` - Lấy danh sách hợp đồng dịch vụ
-- `GET /service-contracts/home/:homeId` - Lấy danh sách hợp đồng dịch vụ theo căn hộ
-- `GET /service-contracts/guest/:guestId` - Lấy danh sách hợp đồng dịch vụ theo khách hàng
-- `GET /service-contracts/homecontract/:homeContractId` - Lấy danh sách hợp đồng dịch vụ theo hợp đồng nhà
-- `GET /service-contracts/service/:serviceId` - Lấy danh sách hợp đồng dịch vụ theo dịch vụ
-- `GET /service-contracts/:id` - Lấy thông tin hợp đồng dịch vụ theo ID
-- `POST /service-contracts` - Tạo hợp đồng dịch vụ mới
-- `PATCH /service-contracts/:id` - Cập nhật thông tin hợp đồng dịch vụ
-- `DELETE /service-contracts/:id` - Xóa hợp đồng dịch vụ
+- `GET /api/v1/service-contracts` - Lấy danh sách hợp đồng dịch vụ
+- `GET /api/v1/service-contracts/home/:homeId` - Lấy danh sách hợp đồng dịch vụ theo căn hộ
+- `GET /api/v1/service-contracts/guest/:guestId` - Lấy danh sách hợp đồng dịch vụ theo khách hàng
+- `GET /api/v1/service-contracts/homecontract/:homeContractId` - Lấy danh sách hợp đồng dịch vụ theo hợp đồng nhà
+- `GET /api/v1/service-contracts/service/:serviceId` - Lấy danh sách hợp đồng dịch vụ theo dịch vụ
+- `GET /api/v1/service-contracts/:id` - Lấy thông tin hợp đồng dịch vụ theo ID
+- `POST /api/v1/service-contracts` - Tạo hợp đồng dịch vụ mới
+- `PATCH /api/v1/service-contracts/:id` - Cập nhật thông tin hợp đồng dịch vụ
+- `DELETE /api/v1/service-contracts/:id` - Xóa hợp đồng dịch vụ
 
 ### Quản lý Thanh toán
 - `GET /invoice-payments` - Lấy danh sách hóa đơn thanh toán
@@ -1520,20 +1520,20 @@ Tất cả các API trong hệ thống:
 - `DELETE /services/:id` - Xóa dịch vụ
 
 ### Quản lý Người nhận
-- `GET /receivers` - Lấy danh sách người nhận
-- `GET /receivers/search?q=` - Tìm kiếm người nhận
-- `GET /receivers/:id` - Lấy thông tin người nhận theo ID
-- `POST /receivers` - Tạo người nhận mới
-- `PATCH /receivers/:id` - Cập nhật thông tin người nhận
-- `DELETE /receivers/:id` - Xóa người nhận
+- `GET /api/v1/receivers` - Lấy danh sách người nhận
+- `GET /api/v1/receivers/search?q=` - Tìm kiếm người nhận
+- `GET /api/v1/receivers/:id` - Lấy thông tin người nhận theo ID
+- `POST /api/v1/receivers` - Tạo người nhận mới
+- `PATCH /api/v1/receivers/:id` - Cập nhật thông tin người nhận
+- `DELETE /api/v1/receivers/:id` - Xóa người nhận
 
 ### Thống kê
-- `GET /statistics/general` - Thống kê tổng quan
-- `GET /statistics/homes` - Thống kê căn hộ
-- `GET /statistics/revenue?year=` - Thống kê doanh thu theo tháng
-- `GET /statistics/contracts` - Thống kê hợp đồng
-- `GET /statistics/payments` - Thống kê thanh toán
-- `GET /statistics/due-payments` - Thống kê thanh toán sắp đến hạn
+- `GET /api/v1/statistics/general` - Thống kê tổng quan
+- `GET /api/v1/statistics/homes` - Thống kê căn hộ
+- `GET /api/v1/statistics/revenue?year=` - Thống kê doanh thu theo tháng
+- `GET /api/v1/statistics/contracts` - Thống kê hợp đồng
+- `GET /api/v1/statistics/payments` - Thống kê thanh toán
+- `GET /api/v1/statistics/due-payments` - Thống kê thanh toán sắp đến hạn
 
 
 
