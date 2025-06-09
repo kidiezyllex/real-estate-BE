@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Guest, GuestSchema } from './schema/guest.schema';
 import { GuestService } from './guest.service';
 import { GuestController } from './guest.controller';
+import { GuestMigrationService } from './guest-migration.service';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { GuestController } from './guest.controller';
     ]),
   ],
   controllers: [GuestController],
-  providers: [GuestService],
-  exports: [GuestService],
+  providers: [GuestService, GuestMigrationService],
+  exports: [GuestService, GuestMigrationService],
 })
 export class GuestModule {} 

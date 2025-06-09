@@ -15,19 +15,35 @@ export class GuestService {
   async create(createGuestDto: CreateGuestDto): Promise<ApiResponseType> {
     const createdGuest = new this.guestModel(createGuestDto);
     const result = await createdGuest.save();
+    
+    // Ensure gender and avatarUrl are always present in the response
+    const guestData = {
+      ...result.toObject(),
+      gender: result.gender !== undefined ? result.gender : null,
+      avatarUrl: result.avatarUrl !== undefined ? result.avatarUrl : null,
+    };
+    
     return createApiResponse({
       statusCode: 201,
       message: 'Tạo khách hàng thành công',
-      data: result,
+      data: guestData,
     });
   }
 
   async findAll(): Promise<ApiResponseType> {
-    const guests = await this.guestModel.find().exec();
+    const guests = await this.guestModel.find().lean().exec();
+    
+    // Ensure gender and avatarUrl are always present in the response
+    const guestsData = guests.map(guest => ({
+      ...guest,
+      gender: guest.gender !== undefined ? guest.gender : null,
+      avatarUrl: guest.avatarUrl !== undefined ? guest.avatarUrl : null,
+    }));
+    
     return createApiResponse({
       statusCode: 200,
       message: 'Lấy danh sách khách hàng thành công',
-      data: guests,
+      data: guestsData,
     });
   }
 
@@ -37,15 +53,22 @@ export class GuestService {
       throw new NotFoundException('Khách hàng không tồn tại');
     }
     
-    const guest = await this.guestModel.findById(id).exec();
+    const guest = await this.guestModel.findById(id).lean().exec();
     if (!guest) {
       throw new NotFoundException('Khách hàng không tồn tại');
     }
     
+    // Ensure gender and avatarUrl are always present in the response
+    const guestData = {
+      ...guest,
+      gender: guest.gender !== undefined ? guest.gender : null,
+      avatarUrl: guest.avatarUrl !== undefined ? guest.avatarUrl : null,
+    };
+    
     return createApiResponse({
       statusCode: 200,
       message: 'Lấy thông tin khách hàng thành công',
-      data: guest,
+      data: guestData,
     });
   }
 
@@ -57,16 +80,24 @@ export class GuestService {
     
     const updatedGuest = await this.guestModel
       .findByIdAndUpdate(id, updateGuestDto, { new: true })
+      .lean()
       .exec();
     
     if (!updatedGuest) {
       throw new NotFoundException('Khách hàng không tồn tại');
     }
     
+    // Ensure gender and avatarUrl are always present in the response
+    const guestData = {
+      ...updatedGuest,
+      gender: updatedGuest.gender !== undefined ? updatedGuest.gender : null,
+      avatarUrl: updatedGuest.avatarUrl !== undefined ? updatedGuest.avatarUrl : null,
+    };
+    
     return createApiResponse({
       statusCode: 200,
       message: 'Cập nhật thông tin khách hàng thành công',
-      data: updatedGuest,
+      data: guestData,
     });
   }
 
@@ -76,16 +107,23 @@ export class GuestService {
       throw new NotFoundException('Khách hàng không tồn tại');
     }
     
-    const deletedGuest = await this.guestModel.findByIdAndDelete(id).exec();
+    const deletedGuest = await this.guestModel.findByIdAndDelete(id).lean().exec();
     
     if (!deletedGuest) {
       throw new NotFoundException('Khách hàng không tồn tại');
     }
     
+    // Ensure gender and avatarUrl are always present in the response
+    const guestData = {
+      ...deletedGuest,
+      gender: deletedGuest.gender !== undefined ? deletedGuest.gender : null,
+      avatarUrl: deletedGuest.avatarUrl !== undefined ? deletedGuest.avatarUrl : null,
+    };
+    
     return createApiResponse({
       statusCode: 200,
       message: 'Xóa khách hàng thành công',
-      data: deletedGuest,
+      data: guestData,
     });
   }
 
@@ -96,12 +134,19 @@ export class GuestService {
         { phone: { $regex: query, $options: 'i' } },
         { email: { $regex: query, $options: 'i' } },
       ],
-    }).exec();
+    }).lean().exec();
+    
+    // Ensure gender and avatarUrl are always present in the response
+    const guestsData = guests.map(guest => ({
+      ...guest,
+      gender: guest.gender !== undefined ? guest.gender : null,
+      avatarUrl: guest.avatarUrl !== undefined ? guest.avatarUrl : null,
+    }));
     
     return createApiResponse({
       statusCode: 200,
       message: 'Tìm kiếm khách hàng thành công',
-      data: guests,
+      data: guestsData,
     });
   }
 } 

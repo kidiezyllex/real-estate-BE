@@ -29,6 +29,12 @@ export class Guest {
   @Prop()
   hometown: string;
   
+  @Prop({ default: null })
+  gender: boolean;
+  
+  @Prop({ default: null })
+  avatarUrl: string;
+  
   @Prop()
   note: string;
 }

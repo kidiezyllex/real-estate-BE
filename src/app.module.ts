@@ -16,6 +16,7 @@ import { InvoicePaymentModule } from './invoice-payment/invoice-payment.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { NotificationModule } from './utils/notification.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { NotificationModule } from './utils/notification.module';
     InvoicePaymentModule,
     StatisticsModule,
     NotificationModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],

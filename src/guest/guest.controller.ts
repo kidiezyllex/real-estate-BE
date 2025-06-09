@@ -4,13 +4,17 @@ import { CreateGuestDto } from './dto/create-guest.dto';
 import { UpdateGuestDto } from './dto/update-guest.dto';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '../auth/jwt-auth.guard';
+import { GuestMigrationService } from './guest-migration.service';
 
 @ApiTags('Khách hàng')
 @ApiBearerAuth('access-token')
 @UseGuards(JwtGuard)
 @Controller('guests')
 export class GuestController {
-  constructor(private readonly guestService: GuestService) {}
+  constructor(
+    private readonly guestService: GuestService,
+    private readonly guestMigrationService: GuestMigrationService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Tạo khách hàng mới' })
@@ -50,5 +54,15 @@ export class GuestController {
   @ApiParam({ name: 'id', description: 'ID của khách hàng' })
   remove(@Param('id') id: string) {
     return this.guestService.remove(id);
+  }
+
+  @Post('migrate/add-missing-fields')
+  @ApiOperation({ summary: 'Migration: Thêm các trường gender và avatarUrl cho khách hàng hiện có' })
+  async migrateAddMissingFields() {
+    await this.guestMigrationService.updateExistingGuestsWithMissingFields();
+    return {
+      statusCode: 200,
+      message: 'Migration completed successfully. Added gender and avatarUrl fields to existing guests.',
+    };
   }
 } 

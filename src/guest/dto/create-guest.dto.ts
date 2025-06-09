@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDateString, IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsEmail, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class CreateGuestDto {
   @ApiProperty({ description: 'Họ tên khách hàng', example: 'Nguyễn Văn B' })
@@ -41,6 +41,16 @@ export class CreateGuestDto {
   @IsOptional()
   @IsString()
   hometown?: string;
+
+  @ApiPropertyOptional({ description: 'Giới tính (true: Nam, false: Nữ)', example: true })
+  @IsOptional()
+  @IsBoolean()
+  gender?: boolean;
+
+  @ApiPropertyOptional({ description: 'URL ảnh đại diện', example: 'https://example.com/avatar.jpg' })
+  @IsOptional()
+  @IsUrl()
+  avatarUrl?: string;
 
   @ApiPropertyOptional({ description: 'Ghi chú', example: 'Khách hàng mới' })
   @IsOptional()
