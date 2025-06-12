@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './user.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import * as bcrpt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponseType, createApiResponse } from 'src/utils/response.util';
@@ -21,7 +21,7 @@ export class UserService {
         throw new HttpException('Email đã tồn tại', HttpStatus.BAD_REQUEST);
       }
       
-      createUserDto.password = await bcrpt.hash(createUserDto.password, 10);
+      createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
       const user = new this.userModel({ ...createUserDto });
       return createApiResponse({
         statusCode: 201,
@@ -109,7 +109,7 @@ export class UserService {
         throw new HttpException('Người dùng không tồn tại', HttpStatus.NOT_FOUND);
       }
 
-      const isPasswordMatch = await bcrpt.compare(
+      const isPasswordMatch = await bcrypt.compare(
         changePasswordDto.currentPassword,
         user.password,
       );
@@ -118,7 +118,7 @@ export class UserService {
         throw new HttpException('Mật khẩu hiện tại không đúng', HttpStatus.BAD_REQUEST);
       }
 
-      const hashedNewPassword = await bcrpt.hash(changePasswordDto.newPassword, 10);
+      const hashedNewPassword = await bcrypt.hash(changePasswordDto.newPassword, 10);
       user.password = hashedNewPassword;
       await user.save();
 
