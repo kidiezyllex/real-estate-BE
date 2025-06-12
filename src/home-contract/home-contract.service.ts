@@ -23,7 +23,14 @@ export class HomeContractService {
     // Kiểm tra xem căn hộ có tồn tại hay không
     await this.homeService.findOne(createHomeContractDto.homeId.toString());
     
-    const createdHomeContract = new this.homeContractModel(createHomeContractDto);
+    // Map price từ DTO thành renta cho schema
+    const contractData = {
+      ...createHomeContractDto,
+      renta: createHomeContractDto.price,
+    } as any;
+    delete contractData.price;
+    
+    const createdHomeContract = new this.homeContractModel(contractData);
     const createResult = await createdHomeContract.save();
     
     return createApiResponse({
@@ -93,8 +100,15 @@ export class HomeContractService {
       await this.homeService.findOne(updateHomeContractDto.homeId.toString());
     }
     
+    // Map price từ DTO thành renta cho schema nếu có
+    const updateData = { ...updateHomeContractDto } as any;
+    if (updateData.price !== undefined) {
+      updateData.renta = updateData.price;
+      delete updateData.price;
+    }
+    
     const updatedHomeContract = await this.homeContractModel
-      .findByIdAndUpdate(id, updateHomeContractDto, { new: true })
+      .findByIdAndUpdate(id, updateData, { new: true })
       .exec();
     
     if (!updatedHomeContract) {

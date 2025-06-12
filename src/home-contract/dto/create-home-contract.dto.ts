@@ -30,7 +30,7 @@ export class CreateHomeContractDto {
   @IsNotEmpty()
   @IsNumber()
   @Type(() => Number)
-  renta: number;
+  price: number;
 
   @ApiProperty({ description: 'Ngày bắt đầu hợp đồng', example: '2024-07-01' })
   @IsNotEmpty()
