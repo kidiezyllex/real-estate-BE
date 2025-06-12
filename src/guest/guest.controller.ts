@@ -1,16 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, UseFilters } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { GuestService } from './guest.service';
 import { CreateGuestDto } from './dto/create-guest.dto';
 import { UpdateGuestDto } from './dto/update-guest.dto';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '../auth/jwt-auth.guard';
 import { GuestMigrationService } from './guest-migration.service';
-import { MongoExceptionFilter } from '../common/filters/mongo-exception.filter';
 
 @ApiTags('Khách hàng')
 @ApiBearerAuth('access-token')
 @UseGuards(JwtGuard)
-@UseFilters(MongoExceptionFilter)
 @Controller('guests')
 export class GuestController {
   constructor(
