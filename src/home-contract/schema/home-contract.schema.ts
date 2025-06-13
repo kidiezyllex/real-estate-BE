@@ -13,6 +13,9 @@ export class HomeContract {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Home', required: true })
   homeId: Home;
   
+  @Prop()
+  contractCode: string;
+  
   @Prop({ required: true })
   duration: number;
   

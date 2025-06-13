@@ -17,6 +17,7 @@ import { StatisticsModule } from './statistics/statistics.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { NotificationModule } from './utils/notification.module';
 import { UploadModule } from './upload/upload.module';
+import { GuestContractsModule } from './guest-contracts/guest-contracts.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { UploadModule } from './upload/upload.module';
     StatisticsModule,
     NotificationModule,
     UploadModule,
+    GuestContractsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

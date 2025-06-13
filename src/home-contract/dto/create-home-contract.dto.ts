@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDateString, IsMongoId, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsDateString, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 
 export class CreateHomeContractDto {
@@ -13,6 +13,11 @@ export class CreateHomeContractDto {
   @IsNotEmpty()
   @IsMongoId()
   homeId: Types.ObjectId;
+
+  @ApiPropertyOptional({ description: 'Mã hợp đồng', example: 'HD001' })
+  @IsOptional()
+  @IsString()
+  contractCode?: string;
 
   @ApiProperty({ description: 'Thời hạn hợp đồng (tháng)', example: 24 })
   @IsNotEmpty()
