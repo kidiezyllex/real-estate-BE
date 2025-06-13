@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { ApiResponseType, createApiResponse } from 'src/utils/response.util';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -22,6 +22,16 @@ export class HomeContractService {
     
     // Kiểm tra xem căn hộ có tồn tại hay không
     await this.homeService.findOne(createHomeContractDto.homeId.toString());
+    
+    // Kiểm tra xem căn hộ đã được cho thuê hay chưa
+    const existingActiveContract = await this.homeContractModel.findOne({
+      homeId: createHomeContractDto.homeId,
+      status: 1, // Status 1 = Đang hiệu lực
+    }).exec();
+    
+    if (existingActiveContract) {
+      throw new BadRequestException('Căn hộ này đã được cho thuê và đang có hợp đồng hiệu lực');
+    }
     
     // Map price từ DTO thành renta cho schema
     const contractData = {
