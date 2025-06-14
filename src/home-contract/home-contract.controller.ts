@@ -1,8 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { HomeContractService } from './home-contract.service';
 import { CreateHomeContractDto } from './dto/create-home-contract.dto';
 import { UpdateHomeContractDto } from './dto/update-home-contract.dto';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Hợp đồng nhà')
@@ -55,7 +71,10 @@ export class HomeContractController {
   @Patch(':id')
   @ApiOperation({ summary: 'Cập nhật thông tin hợp đồng nhà' })
   @ApiParam({ name: 'id', description: 'ID của hợp đồng nhà' })
-  update(@Param('id') id: string, @Body() updateHomeContractDto: UpdateHomeContractDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateHomeContractDto: UpdateHomeContractDto,
+  ) {
     return this.homeContractService.update(id, updateHomeContractDto);
   }
 
@@ -65,4 +84,4 @@ export class HomeContractController {
   remove(@Param('id') id: string) {
     return this.homeContractService.remove(id);
   }
-} 
+}

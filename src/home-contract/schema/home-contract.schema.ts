@@ -12,27 +12,27 @@ export class HomeContract {
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Home', required: true })
   homeId: Home;
-  
+
   @Prop()
   contractCode: string;
-  
+
   @Prop({ required: true })
   duration: number;
-  
+
   @Prop({ required: true })
   payCycle: number;
-  
+
   @Prop({ required: true, type: Number })
   renta: number;
-  
+
   @Prop({ required: true })
   dateStar: Date;
-  
+
   @Prop({ type: Number })
   deposit: number;
-  
+
   @Prop({ default: 1 })
   status: number;
 }
 
-export const HomeContractSchema = SchemaFactory.createForClass(HomeContract); 
+export const HomeContractSchema = SchemaFactory.createForClass(HomeContract);

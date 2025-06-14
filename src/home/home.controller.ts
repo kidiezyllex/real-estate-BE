@@ -1,8 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { HomeService } from './home.service';
 import { CreateHomeDto } from './dto/create-home.dto';
 import { UpdateHomeDto } from './dto/update-home.dto';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Căn hộ')
@@ -25,9 +41,17 @@ export class HomeController {
   }
 
   @Get('available')
-  @ApiOperation({ summary: 'Lấy danh sách căn hộ đang cho thuê' })
+  @ApiOperation({ summary: 'Lấy danh sách căn hộ đang hoạt động' })
   findAvailable() {
     return this.homeService.findAvailable();
+  }
+
+  @Get('available-for-rent')
+  @ApiOperation({
+    summary: 'Lấy danh sách căn hộ có thể cho thuê (chưa có hợp đồng)',
+  })
+  findAvailableForRent() {
+    return this.homeService.findAvailableForRent();
   }
 
   @Get('search')
@@ -35,6 +59,21 @@ export class HomeController {
   @ApiQuery({ name: 'q', description: 'Từ khóa tìm kiếm' })
   search(@Query('q') query: string) {
     return this.homeService.search(query);
+  }
+
+  @Get('search-by-amenities')
+  @ApiOperation({ summary: 'Tìm kiếm căn hộ theo tiện ích' })
+  @ApiQuery({
+    name: 'amenities',
+    description:
+      'Danh sách tiện ích (cách nhau bởi dấu phẩy). Ví dụ: hasWifi,hasParking,hasElevator',
+    example: 'hasWifi,hasParking,hasElevator',
+  })
+  searchByAmenities(@Query('amenities') amenities: string) {
+    const amenityList = amenities
+      ? amenities.split(',').map((a) => a.trim())
+      : [];
+    return this.homeService.searchByAmenities(amenityList);
   }
 
   @Get('homeowner/:homeOwnerId')
@@ -64,4 +103,4 @@ export class HomeController {
   remove(@Param('id') id: string) {
     return this.homeService.remove(id);
   }
-} 
+}

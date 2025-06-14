@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { NotificationService } from './notification.service';
-import { InvoicePayment, InvoicePaymentSchema } from '../invoice-payment/schema/invoice-payment.schema';
+import {
+  InvoicePayment,
+  InvoicePaymentSchema,
+} from '../invoice-payment/schema/invoice-payment.schema';
 import { Guest, GuestSchema } from '../guest/schema/guest.schema';
 
 @Module({
@@ -14,4 +17,4 @@ import { Guest, GuestSchema } from '../guest/schema/guest.schema';
   providers: [NotificationService],
   exports: [NotificationService],
 })
-export class NotificationModule {} 
+export class NotificationModule {}

@@ -41,14 +41,14 @@ export class AuthService {
     try {
       // Sử dụng UserService để tạo người dùng mới
       const result = await this.userService.createUser(createUserDto);
-      
+
       // Lấy thông tin user được tạo
       const userData = result.data;
-      
+
       // Tạo JWT token cho người dùng mới đăng ký
       const payload = { sub: userData._id, email: userData.email };
       const token = this.jwtService.sign(payload);
-      
+
       return createApiResponse({
         statusCode: HttpStatus.CREATED,
         data: {

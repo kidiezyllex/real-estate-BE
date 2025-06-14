@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ServiceContract, ServiceContractSchema } from './schema/service-contract.schema';
+import {
+  ServiceContract,
+  ServiceContractSchema,
+} from './schema/service-contract.schema';
 import { ServiceContractService } from './service-contract.service';
 import { ServiceContractController } from './service-contract.controller';
 import { GuestModule } from '../guest/guest.module';
@@ -22,4 +25,4 @@ import { HomeContractModule } from '../home-contract/home-contract.module';
   providers: [ServiceContractService],
   exports: [ServiceContractService],
 })
-export class ServiceContractModule {} 
+export class ServiceContractModule {}

@@ -1,8 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { HomeOwnerService } from './home-owner.service';
 import { CreateHomeOwnerDto } from './dto/create-home-owner.dto';
 import { UpdateHomeOwnerDto } from './dto/update-home-owner.dto';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Chủ nhà')
@@ -41,7 +57,10 @@ export class HomeOwnerController {
   @Patch(':id')
   @ApiOperation({ summary: 'Cập nhật thông tin chủ nhà' })
   @ApiParam({ name: 'id', description: 'ID của chủ nhà' })
-  update(@Param('id') id: string, @Body() updateHomeOwnerDto: UpdateHomeOwnerDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateHomeOwnerDto: UpdateHomeOwnerDto,
+  ) {
     return this.homeOwnerService.update(id, updateHomeOwnerDto);
   }
 
@@ -51,4 +70,4 @@ export class HomeOwnerController {
   remove(@Param('id') id: string) {
     return this.homeOwnerService.remove(id);
   }
-} 
+}

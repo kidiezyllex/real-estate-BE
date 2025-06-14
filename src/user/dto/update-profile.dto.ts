@@ -16,4 +16,4 @@ export class UpdateProfileDto {
     required: false,
   })
   age?: number;
-} 
+}

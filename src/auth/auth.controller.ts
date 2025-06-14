@@ -13,10 +13,10 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @ApiOperation({ summary: 'Login' })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'User logged in.', 
-    type: ApiResponseDto 
+  @ApiResponse({
+    status: 200,
+    description: 'User logged in.',
+    type: ApiResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiBody({ type: LoginUserDto })
@@ -26,15 +26,17 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'Register a new user account' })
-  @ApiResponse({ 
-    status: 201, 
-    description: 'User registered successfully', 
-    type: ApiResponseDto 
+  @ApiResponse({
+    status: 201,
+    description: 'User registered successfully',
+    type: ApiResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiBody({ type: CreateUserDto })
   @Post('register')
-  async register(@Body() createUserDto: CreateUserDto): Promise<ApiResponseType> {
+  async register(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<ApiResponseType> {
     return await this.authService.register(createUserDto);
   }
 }

@@ -13,9 +13,12 @@ import { Service } from '../service/schema/service.schema';
 @Injectable()
 export class StatisticsService {
   constructor(
-    @InjectModel(InvoicePayment.name) private invoicePaymentModel: Model<InvoicePayment>,
-    @InjectModel(HomeContract.name) private homeContractModel: Model<HomeContract>,
-    @InjectModel(ServiceContract.name) private serviceContractModel: Model<ServiceContract>,
+    @InjectModel(InvoicePayment.name)
+    private invoicePaymentModel: Model<InvoicePayment>,
+    @InjectModel(HomeContract.name)
+    private homeContractModel: Model<HomeContract>,
+    @InjectModel(ServiceContract.name)
+    private serviceContractModel: Model<ServiceContract>,
     @InjectModel(Home.name) private homeModel: Model<Home>,
     @InjectModel(Guest.name) private guestModel: Model<Guest>,
     @InjectModel(HomeOwner.name) private homeOwnerModel: Model<HomeOwner>,
@@ -24,12 +27,13 @@ export class StatisticsService {
 
   // Thống kê tổng số căn hộ, khách hàng, chủ nhà, dịch vụ
   async getGeneralStatistics(): Promise<ApiResponseType> {
-    const [homesCount, guestsCount, homeOwnersCount, servicesCount] = await Promise.all([
-      this.homeModel.countDocuments(),
-      this.guestModel.countDocuments(),
-      this.homeOwnerModel.countDocuments(),
-      this.serviceModel.countDocuments(),
-    ]);
+    const [homesCount, guestsCount, homeOwnersCount, servicesCount] =
+      await Promise.all([
+        this.homeModel.countDocuments(),
+        this.guestModel.countDocuments(),
+        this.homeOwnerModel.countDocuments(),
+        this.serviceModel.countDocuments(),
+      ]);
 
     const data = {
       homesCount,
@@ -91,7 +95,7 @@ export class StatisticsService {
 
     // Tạo mảng 12 tháng với doanh thu 0
     const monthlyRevenue = Array(12).fill(0);
-    
+
     // Điền doanh thu vào các tháng tương ứng
     result.forEach((item) => {
       monthlyRevenue[item._id - 1] = item.total;
@@ -112,14 +116,15 @@ export class StatisticsService {
   async getContractsStatistics(): Promise<ApiResponseType> {
     const homeContracts = await this.homeContractModel.countDocuments();
     const serviceContracts = await this.serviceContractModel.countDocuments();
-    
+
     const activeHomeContracts = await this.homeContractModel.countDocuments({
       dateEnd: { $gte: new Date() },
     });
-    
-    const activeServiceContracts = await this.serviceContractModel.countDocuments({
-      dateEnd: { $gte: new Date() },
-    });
+
+    const activeServiceContracts =
+      await this.serviceContractModel.countDocuments({
+        dateEnd: { $gte: new Date() },
+      });
 
     const data = {
       totalContracts: homeContracts + serviceContracts,
@@ -138,14 +143,16 @@ export class StatisticsService {
 
   // Thống kê số lượng thanh toán đúng hạn/trễ hạn
   async getPaymentStatistics(): Promise<ApiResponseType> {
-    const totalPayments = await this.invoicePaymentModel.countDocuments({ statusPaym: 2 }); // Đã thanh toán
-    
+    const totalPayments = await this.invoicePaymentModel.countDocuments({
+      statusPaym: 2,
+    }); // Đã thanh toán
+
     // Số lượng thanh toán đúng hạn (ngày thanh toán thực tế <= ngày dự kiến)
     const onTimePayments = await this.invoicePaymentModel.countDocuments({
       statusPaym: 2,
       $expr: { $lte: ['$datePaymentReal', '$datePaymentExpec'] },
     });
-    
+
     // Số lượng thanh toán trễ hạn
     const latePayments = totalPayments - onTimePayments;
 
@@ -169,12 +176,12 @@ export class StatisticsService {
     const now = new Date();
     const sevenDaysLater = new Date();
     sevenDaysLater.setDate(now.getDate() + 7);
-    
+
     const duePayments = await this.invoicePaymentModel.countDocuments({
       datePaymentExpec: { $gte: now, $lte: sevenDaysLater },
       statusPaym: 1, // Chưa thanh toán
     });
-    
+
     const totalDueAmount = await this.invoicePaymentModel.aggregate([
       {
         $match: {
@@ -201,4 +208,4 @@ export class StatisticsService {
       data,
     });
   }
-} 
+}

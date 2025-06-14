@@ -1,5 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsEmail, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import {
+  IsBoolean,
+  IsDateString,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 
 export class CreateGuestDto {
   @ApiProperty({ description: 'Họ tên khách hàng', example: 'Nguyễn Văn B' })
@@ -7,22 +15,34 @@ export class CreateGuestDto {
   @IsString()
   fullname: string;
 
-  @ApiProperty({ description: 'Số điện thoại khách hàng', example: '0912345678' })
+  @ApiProperty({
+    description: 'Số điện thoại khách hàng',
+    example: '0912345678',
+  })
   @IsNotEmpty()
   @IsString()
   phone: string;
 
-  @ApiPropertyOptional({ description: 'Email khách hàng', example: 'example@gmail.com' })
+  @ApiPropertyOptional({
+    description: 'Email khách hàng',
+    example: 'example@gmail.com',
+  })
   @IsOptional()
   @IsEmail()
   email?: string;
 
-  @ApiPropertyOptional({ description: 'Số CMND/CCCD của khách hàng', example: '012345678901' })
+  @ApiPropertyOptional({
+    description: 'Số CMND/CCCD của khách hàng',
+    example: '012345678901',
+  })
   @IsOptional()
   @IsString()
   citizenId?: string;
 
-  @ApiPropertyOptional({ description: 'Ngày cấp CMND/CCCD', example: '2020-01-01' })
+  @ApiPropertyOptional({
+    description: 'Ngày cấp CMND/CCCD',
+    example: '2020-01-01',
+  })
   @IsOptional()
   @IsDateString()
   citizen_date?: string;
@@ -42,12 +62,18 @@ export class CreateGuestDto {
   @IsString()
   hometown?: string;
 
-  @ApiPropertyOptional({ description: 'Giới tính (true: Nam, false: Nữ)', example: true })
+  @ApiPropertyOptional({
+    description: 'Giới tính (true: Nam, false: Nữ)',
+    example: true,
+  })
   @IsOptional()
   @IsBoolean()
   gender?: boolean;
 
-  @ApiPropertyOptional({ description: 'URL ảnh đại diện', example: 'https://example.com/avatar.jpg' })
+  @ApiPropertyOptional({
+    description: 'URL ảnh đại diện',
+    example: 'https://example.com/avatar.jpg',
+  })
   @IsOptional()
   @IsUrl()
   avatarUrl?: string;
@@ -56,4 +82,4 @@ export class CreateGuestDto {
   @IsOptional()
   @IsString()
   note?: string;
-} 
+}

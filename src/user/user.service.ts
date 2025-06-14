@@ -16,11 +16,13 @@ export class UserService {
   async createUser(createUserDto: CreateUserDto): Promise<ApiResponseType> {
     try {
       // Kiểm tra email đã tồn tại chưa
-      const existingUser = await this.userModel.findOne({ email: createUserDto.email });
+      const existingUser = await this.userModel.findOne({
+        email: createUserDto.email,
+      });
       if (existingUser) {
         throw new HttpException('Email đã tồn tại', HttpStatus.BAD_REQUEST);
       }
-      
+
       createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
       const user = new this.userModel({ ...createUserDto });
       return createApiResponse({
@@ -33,7 +35,7 @@ export class UserService {
     }
   }
 
-  async fetchUsersByName(name: String): Promise<ApiResponseType> {
+  async fetchUsersByName(name: string): Promise<ApiResponseType> {
     try {
       const users = await this.userModel
         .find({ name: { $regex: name } })
@@ -60,7 +62,10 @@ export class UserService {
     try {
       const user = await this.userModel.findById(userId);
       if (!user) {
-        throw new HttpException('Người dùng không tồn tại', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'Người dùng không tồn tại',
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       return createApiResponse({
@@ -80,7 +85,10 @@ export class UserService {
     try {
       const user = await this.userModel.findById(userId);
       if (!user) {
-        throw new HttpException('Người dùng không tồn tại', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'Người dùng không tồn tại',
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       const updatedUser = await this.userModel.findByIdAndUpdate(
@@ -106,7 +114,10 @@ export class UserService {
     try {
       const user = await this.userModel.findById(userId).select('+password');
       if (!user) {
-        throw new HttpException('Người dùng không tồn tại', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'Người dùng không tồn tại',
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       const isPasswordMatch = await bcrypt.compare(
@@ -115,10 +126,16 @@ export class UserService {
       );
 
       if (!isPasswordMatch) {
-        throw new HttpException('Mật khẩu hiện tại không đúng', HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          'Mật khẩu hiện tại không đúng',
+          HttpStatus.BAD_REQUEST,
+        );
       }
 
-      const hashedNewPassword = await bcrypt.hash(changePasswordDto.newPassword, 10);
+      const hashedNewPassword = await bcrypt.hash(
+        changePasswordDto.newPassword,
+        10,
+      );
       user.password = hashedNewPassword;
       await user.save();
 

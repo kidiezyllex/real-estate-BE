@@ -1,15 +1,28 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDateString, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsMongoId,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { Types } from 'mongoose';
 
 export class CreateHomeContractDto {
-  @ApiProperty({ description: 'ID của khách hàng', example: '665b1c2f8f1b2a001e6e7a20' })
+  @ApiProperty({
+    description: 'ID của khách hàng',
+    example: '665b1c2f8f1b2a001e6e7a20',
+  })
   @IsNotEmpty()
   @IsMongoId()
   guestId: Types.ObjectId;
 
-  @ApiProperty({ description: 'ID của căn hộ', example: '665b1c2f8f1b2a001e6e7a30' })
+  @ApiProperty({
+    description: 'ID của căn hộ',
+    example: '665b1c2f8f1b2a001e6e7a30',
+  })
   @IsNotEmpty()
   @IsMongoId()
   homeId: Types.ObjectId;
@@ -48,9 +61,13 @@ export class CreateHomeContractDto {
   @Type(() => Number)
   deposit?: number;
 
-  @ApiPropertyOptional({ description: 'Trạng thái hợp đồng (1: Đang hiệu lực, 2: Hết hạn, 3: Đã hủy)', example: 1 })
+  @ApiPropertyOptional({
+    description:
+      'Trạng thái hợp đồng (1: Đang hiệu lực, 2: Hết hạn, 3: Đã hủy)',
+    example: 1,
+  })
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   status?: number;
-} 
+}

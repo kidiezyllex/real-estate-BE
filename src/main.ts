@@ -8,7 +8,9 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableCors();
   const config = new DocumentBuilder()
-    .setTitle('Real Estate Management System (NestJS, MongoDB, Swagger and JWT Auth)')
+    .setTitle(
+      'Real Estate Management System (NestJS, MongoDB, Swagger and JWT Auth)',
+    )
     .setVersion('1.0')
     .addBearerAuth(
       {

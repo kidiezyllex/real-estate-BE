@@ -15,7 +15,7 @@ export class ReceiverService {
   async create(createReceiverDto: CreateReceiverDto): Promise<ApiResponseType> {
     const createdReceiver = new this.receiverModel(createReceiverDto);
     const createResult = await createdReceiver.save();
-    
+
     return createApiResponse({
       statusCode: 201,
       message: 'Tạo người nhận thành công',
@@ -25,7 +25,7 @@ export class ReceiverService {
 
   async findAll(): Promise<ApiResponseType> {
     const findAllResult = await this.receiverModel.find().exec();
-    
+
     return createApiResponse({
       statusCode: 200,
       message: 'Lấy danh sách người nhận thành công',
@@ -38,7 +38,7 @@ export class ReceiverService {
     if (!isValidId) {
       throw new NotFoundException('Người nhận không tồn tại');
     }
-    
+
     const receiver = await this.receiverModel.findById(id).exec();
     if (!receiver) {
       throw new NotFoundException('Người nhận không tồn tại');
@@ -50,20 +50,23 @@ export class ReceiverService {
     });
   }
 
-  async update(id: string, updateReceiverDto: UpdateReceiverDto): Promise<ApiResponseType> {
+  async update(
+    id: string,
+    updateReceiverDto: UpdateReceiverDto,
+  ): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Người nhận không tồn tại');
     }
-    
+
     const updatedReceiver = await this.receiverModel
       .findByIdAndUpdate(id, updateReceiverDto, { new: true })
       .exec();
-    
+
     if (!updatedReceiver) {
       throw new NotFoundException('Người nhận không tồn tại');
     }
-    
+
     return createApiResponse({
       statusCode: 200,
       message: 'Cập nhật thông tin người nhận thành công',
@@ -76,13 +79,15 @@ export class ReceiverService {
     if (!isValidId) {
       throw new NotFoundException('Người nhận không tồn tại');
     }
-    
-    const deletedReceiver = await this.receiverModel.findByIdAndDelete(id).exec();
-    
+
+    const deletedReceiver = await this.receiverModel
+      .findByIdAndDelete(id)
+      .exec();
+
     if (!deletedReceiver) {
       throw new NotFoundException('Người nhận không tồn tại');
     }
-    
+
     return createApiResponse({
       statusCode: 200,
       message: 'Xóa người nhận thành công',
@@ -91,19 +96,21 @@ export class ReceiverService {
   }
 
   async search(query: string): Promise<ApiResponseType> {
-    const results = await this.receiverModel.find({
-      $or: [
-        { name: { $regex: query, $options: 'i' } },
-        { phone: { $regex: query, $options: 'i' } },
-        { email: { $regex: query, $options: 'i' } },
-        { bankAccount: { $regex: query, $options: 'i' } },
-      ],
-    }).exec();
-    
+    const results = await this.receiverModel
+      .find({
+        $or: [
+          { name: { $regex: query, $options: 'i' } },
+          { phone: { $regex: query, $options: 'i' } },
+          { email: { $regex: query, $options: 'i' } },
+          { bankAccount: { $regex: query, $options: 'i' } },
+        ],
+      })
+      .exec();
+
     return createApiResponse({
       statusCode: 200,
       message: 'Tìm kiếm người nhận thành công',
       data: results,
     });
   }
-} 
+}

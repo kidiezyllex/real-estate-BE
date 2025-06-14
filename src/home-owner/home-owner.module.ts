@@ -14,4 +14,4 @@ import { HomeOwnerController } from './home-owner.controller';
   providers: [HomeOwnerService],
   exports: [HomeOwnerService],
 })
-export class HomeOwnerModule {} 
+export class HomeOwnerModule {}

@@ -1,8 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ServiceContractService } from './service-contract.service';
 import { CreateServiceContractDto } from './dto/create-service-contract.dto';
 import { UpdateServiceContractDto } from './dto/update-service-contract.dto';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Hợp đồng dịch vụ')
@@ -10,7 +24,9 @@ import { JwtGuard } from '../auth/jwt-auth.guard';
 @UseGuards(JwtGuard)
 @Controller('service-contracts')
 export class ServiceContractController {
-  constructor(private readonly serviceContractService: ServiceContractService) {}
+  constructor(
+    private readonly serviceContractService: ServiceContractService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Tạo hợp đồng dịch vụ mới' })
@@ -62,7 +78,10 @@ export class ServiceContractController {
   @Patch(':id')
   @ApiOperation({ summary: 'Cập nhật thông tin hợp đồng dịch vụ' })
   @ApiParam({ name: 'id', description: 'ID của hợp đồng dịch vụ' })
-  update(@Param('id') id: string, @Body() updateServiceContractDto: UpdateServiceContractDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateServiceContractDto: UpdateServiceContractDto,
+  ) {
     return this.serviceContractService.update(id, updateServiceContractDto);
   }
 
@@ -72,4 +91,4 @@ export class ServiceContractController {
   remove(@Param('id') id: string) {
     return this.serviceContractService.remove(id);
   }
-} 
+}

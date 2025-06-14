@@ -14,4 +14,4 @@ import { ReceiverController } from './receiver.controller';
   providers: [ReceiverService],
   exports: [ReceiverService],
 })
-export class ReceiverModule {} 
+export class ReceiverModule {}

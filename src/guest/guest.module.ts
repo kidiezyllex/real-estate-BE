@@ -7,12 +7,10 @@ import { GuestMigrationService } from './guest-migration.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Guest.name, schema: GuestSchema },
-    ]),
+    MongooseModule.forFeature([{ name: Guest.name, schema: GuestSchema }]),
   ],
   controllers: [GuestController],
   providers: [GuestService, GuestMigrationService],
   exports: [GuestService, GuestMigrationService],
 })
-export class GuestModule {} 
+export class GuestModule {}

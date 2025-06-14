@@ -1,8 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { InvoicePaymentService } from './invoice-payment.service';
 import { CreateInvoicePaymentDto } from './dto/create-invoice-payment.dto';
 import { UpdateInvoicePaymentDto } from './dto/update-invoice-payment.dto';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Hóa đơn thanh toán')
@@ -31,15 +47,22 @@ export class InvoicePaymentController {
   }
 
   @Get('home-contract/:homeContractId')
-  @ApiOperation({ summary: 'Lấy danh sách hóa đơn thanh toán theo hợp đồng nhà' })
+  @ApiOperation({
+    summary: 'Lấy danh sách hóa đơn thanh toán theo hợp đồng nhà',
+  })
   @ApiParam({ name: 'homeContractId', description: 'ID của hợp đồng nhà' })
   findByHomeContract(@Param('homeContractId') homeContractId: string) {
     return this.invoicePaymentService.findByHomeContract(homeContractId);
   }
 
   @Get('service-contract/:serviceContractId')
-  @ApiOperation({ summary: 'Lấy danh sách hóa đơn thanh toán theo hợp đồng dịch vụ' })
-  @ApiParam({ name: 'serviceContractId', description: 'ID của hợp đồng dịch vụ' })
+  @ApiOperation({
+    summary: 'Lấy danh sách hóa đơn thanh toán theo hợp đồng dịch vụ',
+  })
+  @ApiParam({
+    name: 'serviceContractId',
+    description: 'ID của hợp đồng dịch vụ',
+  })
   findByServiceContract(@Param('serviceContractId') serviceContractId: string) {
     return this.invoicePaymentService.findByServiceContract(serviceContractId);
   }
@@ -61,14 +84,20 @@ export class InvoicePaymentController {
   @Patch(':id')
   @ApiOperation({ summary: 'Cập nhật thông tin hóa đơn thanh toán' })
   @ApiParam({ name: 'id', description: 'ID của hóa đơn thanh toán' })
-  update(@Param('id') id: string, @Body() updateInvoicePaymentDto: UpdateInvoicePaymentDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateInvoicePaymentDto: UpdateInvoicePaymentDto,
+  ) {
     return this.invoicePaymentService.update(id, updateInvoicePaymentDto);
   }
 
   @Patch(':id/status')
   @ApiOperation({ summary: 'Cập nhật trạng thái thanh toán của hóa đơn' })
   @ApiParam({ name: 'id', description: 'ID của hóa đơn thanh toán' })
-  @ApiQuery({ name: 'status', description: 'Trạng thái thanh toán (1: Chưa thanh toán, 2: Đã thanh toán)' })
+  @ApiQuery({
+    name: 'status',
+    description: 'Trạng thái thanh toán (1: Chưa thanh toán, 2: Đã thanh toán)',
+  })
   updateStatus(@Param('id') id: string, @Query('status') status: string) {
     return this.invoicePaymentService.updatePaymentStatus(id, parseInt(status));
   }
@@ -83,14 +112,27 @@ export class InvoicePaymentController {
   @Post('generate/home-contract/:homeContractId')
   @ApiOperation({ summary: 'Tạo tự động các đợt thanh toán cho hợp đồng nhà' })
   @ApiParam({ name: 'homeContractId', description: 'ID của hợp đồng nhà' })
-  generatePaymentsForHomeContract(@Param('homeContractId') homeContractId: string) {
-    return this.invoicePaymentService.generatePaymentsForHomeContract(homeContractId);
+  generatePaymentsForHomeContract(
+    @Param('homeContractId') homeContractId: string,
+  ) {
+    return this.invoicePaymentService.generatePaymentsForHomeContract(
+      homeContractId,
+    );
   }
 
   @Post('generate/service-contract/:serviceContractId')
-  @ApiOperation({ summary: 'Tạo tự động các đợt thanh toán cho hợp đồng dịch vụ' })
-  @ApiParam({ name: 'serviceContractId', description: 'ID của hợp đồng dịch vụ' })
-  generatePaymentsForServiceContract(@Param('serviceContractId') serviceContractId: string) {
-    return this.invoicePaymentService.generatePaymentsForServiceContract(serviceContractId);
+  @ApiOperation({
+    summary: 'Tạo tự động các đợt thanh toán cho hợp đồng dịch vụ',
+  })
+  @ApiParam({
+    name: 'serviceContractId',
+    description: 'ID của hợp đồng dịch vụ',
+  })
+  generatePaymentsForServiceContract(
+    @Param('serviceContractId') serviceContractId: string,
+  ) {
+    return this.invoicePaymentService.generatePaymentsForServiceContract(
+      serviceContractId,
+    );
   }
-} 
+}

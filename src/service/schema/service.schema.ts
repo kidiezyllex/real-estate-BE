@@ -10,9 +10,9 @@ export class Service {
 
   @Prop()
   unit: string;
-  
+
   @Prop()
   description: string;
 }
 
-export const ServiceSchema = SchemaFactory.createForClass(Service); 
+export const ServiceSchema = SchemaFactory.createForClass(Service);

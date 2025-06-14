@@ -1,25 +1,43 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDateString, IsMongoId, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsDateString,
+  IsMongoId,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+} from 'class-validator';
 import { Types } from 'mongoose';
 
 export class CreateServiceContractDto {
-  @ApiProperty({ description: 'ID của dịch vụ', example: '665b1c2f8f1b2a001e6e7a70' })
+  @ApiProperty({
+    description: 'ID của dịch vụ',
+    example: '665b1c2f8f1b2a001e6e7a70',
+  })
   @IsNotEmpty()
   @IsMongoId()
   serviceId: Types.ObjectId;
 
-  @ApiProperty({ description: 'ID của căn hộ', example: '665b1c2f8f1b2a001e6e7a30' })
+  @ApiProperty({
+    description: 'ID của căn hộ',
+    example: '665b1c2f8f1b2a001e6e7a30',
+  })
   @IsNotEmpty()
   @IsMongoId()
   homeId: Types.ObjectId;
 
-  @ApiProperty({ description: 'ID của khách hàng', example: '665b1c2f8f1b2a001e6e7a20' })
+  @ApiProperty({
+    description: 'ID của khách hàng',
+    example: '665b1c2f8f1b2a001e6e7a20',
+  })
   @IsNotEmpty()
   @IsMongoId()
   guestId: Types.ObjectId;
 
-  @ApiPropertyOptional({ description: 'ID của hợp đồng thuê nhà', example: '665b1c2f8f1b2a001e6e7a40' })
+  @ApiPropertyOptional({
+    description: 'ID của hợp đồng thuê nhà',
+    example: '665b1c2f8f1b2a001e6e7a40',
+  })
   @IsOptional()
   @IsMongoId()
   homeContractStk?: Types.ObjectId;
@@ -57,15 +75,22 @@ export class CreateServiceContractDto {
   @IsDateString()
   dateEnd: string;
 
-  @ApiPropertyOptional({ description: 'Trạng thái hợp đồng (1: Đang hiệu lực, 2: Hết hạn, 3: Đã hủy)', example: 1 })
+  @ApiPropertyOptional({
+    description:
+      'Trạng thái hợp đồng (1: Đang hiệu lực, 2: Hết hạn, 3: Đã hủy)',
+    example: 1,
+  })
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   statusContrac?: number;
 
-  @ApiPropertyOptional({ description: 'Giới hạn số lần sử dụng (0: không giới hạn)', example: 10 })
+  @ApiPropertyOptional({
+    description: 'Giới hạn số lần sử dụng (0: không giới hạn)',
+    example: 10,
+  })
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   limit?: number;
-} 
+}

@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { InvoicePayment, InvoicePaymentSchema } from './schema/invoice-payment.schema';
+import {
+  InvoicePayment,
+  InvoicePaymentSchema,
+} from './schema/invoice-payment.schema';
 import { InvoicePaymentService } from './invoice-payment.service';
 import { InvoicePaymentController } from './invoice-payment.controller';
 import { HomeContractModule } from '../home-contract/home-contract.module';
@@ -22,4 +25,4 @@ import { ReceiverModule } from '../receiver/receiver.module';
   providers: [InvoicePaymentService],
   exports: [InvoicePaymentService],
 })
-export class InvoicePaymentModule {} 
+export class InvoicePaymentModule {}

@@ -14,42 +14,43 @@ export class InvoicePayment {
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Home', required: true })
   homeId: Home;
-  
+
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'ServiceContract' })
   serviceContractId: ServiceContract;
-  
+
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Receiver' })
   receiverId: Receiver;
-  
+
   @Prop({ required: true })
   type: number;
-  
+
   @Prop()
   datePaymentRemind: Date;
-  
+
   @Prop()
   datePaymentExpec: Date;
-  
+
   @Prop()
   datePaymentReal: Date;
-  
+
   @Prop({ required: true })
   dateStar: Date;
-  
+
   @Prop({ required: true })
   dateEnd: Date;
-  
+
   @Prop({ default: 1 })
   statusPaym: number;
-  
+
   @Prop({ type: Number, default: 0 })
   totalReceive: number;
-  
+
   @Prop({ type: Number, default: 0 })
   totalSend: number;
-  
+
   @Prop()
   createdAt: Date;
 }
 
-export const InvoicePaymentSchema = SchemaFactory.createForClass(InvoicePayment); 
+export const InvoicePaymentSchema =
+  SchemaFactory.createForClass(InvoicePayment);

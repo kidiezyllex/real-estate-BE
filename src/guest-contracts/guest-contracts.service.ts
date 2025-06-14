@@ -17,11 +17,13 @@ export class GuestContractsService {
     await this.guestService.findOne(guestId);
 
     // Lấy hợp đồng thuê nhà của khách hàng
-    const homeContractsResponse = await this.homeContractService.findByGuest(guestId);
+    const homeContractsResponse =
+      await this.homeContractService.findByGuest(guestId);
     const homeContracts = homeContractsResponse.data || [];
 
     // Lấy hợp đồng dịch vụ của khách hàng
-    const serviceContractsResponse = await this.serviceContractService.findByGuest(guestId);
+    const serviceContractsResponse =
+      await this.serviceContractService.findByGuest(guestId);
     const serviceContracts = serviceContractsResponse.data || [];
 
     // Kết hợp dữ liệu
@@ -41,4 +43,4 @@ export class GuestContractsService {
       data: allContracts,
     });
   }
-} 
+}

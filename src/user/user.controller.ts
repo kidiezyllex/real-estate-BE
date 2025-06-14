@@ -35,7 +35,7 @@ export class UserController {
   @ApiResponse({
     status: 201,
     description: 'The user has been successfully created.',
-    type: ApiResponseDto
+    type: ApiResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Bad request.' })
   @Post('register')
@@ -49,7 +49,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'User profile retrieved successfully.',
-    type: ApiResponseDto
+    type: ApiResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @UseGuards(JwtGuard)
@@ -63,7 +63,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'User profile updated successfully.',
-    type: ApiResponseDto
+    type: ApiResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @UseGuards(JwtGuard)
@@ -80,7 +80,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Password changed successfully.',
-    type: ApiResponseDto
+    type: ApiResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @UseGuards(JwtGuard)
@@ -97,7 +97,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Users fetched successfully.',
-    type: ApiResponseDto
+    type: ApiResponseDto,
   })
   @UseGuards(JwtGuard)
   @ApiBearerAuth('access-token')
@@ -114,7 +114,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully updated.',
-    type: ApiResponseDto
+    type: ApiResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Bad request.' })
   @Put('/:id')
@@ -129,7 +129,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully deleted.',
-    type: ApiResponseDto
+    type: ApiResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Bad request.' })
   @Delete('/:id')

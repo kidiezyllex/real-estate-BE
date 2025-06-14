@@ -1,6 +1,12 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { StatisticsService } from './statistics.service';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Thống kê')
@@ -11,13 +17,18 @@ export class StatisticsController {
   constructor(private readonly statisticsService: StatisticsService) {}
 
   @Get('general')
-  @ApiOperation({ summary: 'Thống kê tổng quan (số lượng căn hộ, khách hàng, chủ nhà, dịch vụ)' })
+  @ApiOperation({
+    summary:
+      'Thống kê tổng quan (số lượng căn hộ, khách hàng, chủ nhà, dịch vụ)',
+  })
   getGeneralStatistics() {
     return this.statisticsService.getGeneralStatistics();
   }
 
   @Get('homes')
-  @ApiOperation({ summary: 'Thống kê căn hộ (tổng số, đang cho thuê, đã thuê)' })
+  @ApiOperation({
+    summary: 'Thống kê căn hộ (tổng số, đang cho thuê, đã thuê)',
+  })
   getHomeStatistics() {
     return this.statisticsService.getHomeStatistics();
   }
@@ -30,7 +41,10 @@ export class StatisticsController {
   }
 
   @Get('contracts')
-  @ApiOperation({ summary: 'Thống kê hợp đồng (tổng số, hợp đồng nhà, hợp đồng dịch vụ, đang hoạt động)' })
+  @ApiOperation({
+    summary:
+      'Thống kê hợp đồng (tổng số, hợp đồng nhà, hợp đồng dịch vụ, đang hoạt động)',
+  })
   getContractsStatistics() {
     return this.statisticsService.getContractsStatistics();
   }
@@ -46,4 +60,4 @@ export class StatisticsController {
   getDuePaymentsStatistics() {
     return this.statisticsService.getDuePaymentsStatistics();
   }
-} 
+}

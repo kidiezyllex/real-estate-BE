@@ -6,13 +6,9 @@ import { ServiceContractModule } from '../service-contract/service-contract.modu
 import { GuestModule } from '../guest/guest.module';
 
 @Module({
-  imports: [
-    HomeContractModule,
-    ServiceContractModule,
-    GuestModule,
-  ],
+  imports: [HomeContractModule, ServiceContractModule, GuestModule],
   controllers: [GuestContractsController],
   providers: [GuestContractsService],
   exports: [GuestContractsService],
 })
-export class GuestContractsModule {} 
+export class GuestContractsModule {}

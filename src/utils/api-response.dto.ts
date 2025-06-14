@@ -4,7 +4,10 @@ export class ApiResponseDto<T = any> {
   @ApiProperty({ example: 200, description: 'HTTP status code' })
   statusCode: number;
 
-  @ApiProperty({ description: 'Response message', example: 'Thao tác thành công' })
+  @ApiProperty({
+    description: 'Response message',
+    example: 'Thao tác thành công',
+  })
   message: string;
 
   @ApiProperty({ description: 'Response data' })
@@ -28,7 +31,7 @@ export class ApiResponsePaginationDto<T = any> extends ApiResponseDto<{
           email: 'nguyenvan.an@gmail.com',
           age: 32,
           createdAt: '2023-07-06T08:35:27.000Z',
-          updatedAt: '2023-07-06T08:35:27.000Z'
+          updatedAt: '2023-07-06T08:35:27.000Z',
         },
         {
           id: '64a68d1f5abc123456789013',
@@ -36,8 +39,8 @@ export class ApiResponsePaginationDto<T = any> extends ApiResponseDto<{
           email: 'tranthi.binh@gmail.com',
           age: 28,
           createdAt: '2023-07-06T09:12:45.000Z',
-          updatedAt: '2023-07-06T09:12:45.000Z'
-        }
+          updatedAt: '2023-07-06T09:12:45.000Z',
+        },
       ],
       total: 25,
       page: 1,
@@ -52,4 +55,4 @@ export class ApiResponsePaginationDto<T = any> extends ApiResponseDto<{
     limit: number;
     totalPages: number;
   };
-} 
+}

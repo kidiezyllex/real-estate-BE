@@ -7,13 +7,11 @@ import { HomeOwnerModule } from '../home-owner/home-owner.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Home.name, schema: HomeSchema },
-    ]),
+    MongooseModule.forFeature([{ name: Home.name, schema: HomeSchema }]),
     HomeOwnerModule,
   ],
   controllers: [HomeController],
   providers: [HomeService],
   exports: [HomeService],
 })
-export class HomeModule {} 
+export class HomeModule {}

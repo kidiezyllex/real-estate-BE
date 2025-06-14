@@ -2,7 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ApiResponseType, createApiResponse } from 'src/utils/response.util';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { ServiceContract, ServiceContractDocument } from './schema/service-contract.schema';
+import {
+  ServiceContract,
+  ServiceContractDocument,
+} from './schema/service-contract.schema';
 import { CreateServiceContractDto } from './dto/create-service-contract.dto';
 import { UpdateServiceContractDto } from './dto/update-service-contract.dto';
 import { GuestService } from '../guest/guest.service';
@@ -13,31 +16,42 @@ import { HomeContractService } from '../home-contract/home-contract.service';
 @Injectable()
 export class ServiceContractService {
   constructor(
-    @InjectModel(ServiceContract.name) private serviceContractModel: Model<ServiceContractDocument>,
+    @InjectModel(ServiceContract.name)
+    private serviceContractModel: Model<ServiceContractDocument>,
     private guestService: GuestService,
     private homeService: HomeService,
     private serviceService: ServiceService,
     private homeContractService: HomeContractService,
   ) {}
 
-  async create(createServiceContractDto: CreateServiceContractDto): Promise<ApiResponseType> {
+  async create(
+    createServiceContractDto: CreateServiceContractDto,
+  ): Promise<ApiResponseType> {
     // Kiểm tra xem dịch vụ có tồn tại hay không
-    await this.serviceService.findOne(createServiceContractDto.serviceId.toString());
-    
+    await this.serviceService.findOne(
+      createServiceContractDto.serviceId.toString(),
+    );
+
     // Kiểm tra xem căn hộ có tồn tại hay không
     await this.homeService.findOne(createServiceContractDto.homeId.toString());
-    
+
     // Kiểm tra xem khách hàng có tồn tại hay không
-    await this.guestService.findOne(createServiceContractDto.guestId.toString());
-    
+    await this.guestService.findOne(
+      createServiceContractDto.guestId.toString(),
+    );
+
     // Nếu có liên kết với hợp đồng nhà, kiểm tra xem hợp đồng nhà có tồn tại không
     if (createServiceContractDto.homeContractStk) {
-      await this.homeContractService.findOne(createServiceContractDto.homeContractStk.toString());
+      await this.homeContractService.findOne(
+        createServiceContractDto.homeContractStk.toString(),
+      );
     }
-    
-    const createdServiceContract = new this.serviceContractModel(createServiceContractDto);
+
+    const createdServiceContract = new this.serviceContractModel(
+      createServiceContractDto,
+    );
     const createResult = await createdServiceContract.save();
-    
+
     return createApiResponse({
       statusCode: 201,
       message: 'Tạo hợp đồng dịch vụ thành công',
@@ -46,7 +60,8 @@ export class ServiceContractService {
   }
 
   async findAll(): Promise<ApiResponseType> {
-    const contracts = await this.serviceContractModel.find()
+    const contracts = await this.serviceContractModel
+      .find()
       .populate('serviceId')
       .populate('guestId')
       .populate({
@@ -57,7 +72,7 @@ export class ServiceContractService {
       })
       .populate('homeContractStk')
       .exec();
-    
+
     return createApiResponse({
       statusCode: 200,
       message: 'Lấy danh sách hợp đồng dịch vụ thành công',
@@ -70,8 +85,9 @@ export class ServiceContractService {
     if (!isValidId) {
       throw new NotFoundException('Hợp đồng dịch vụ không tồn tại');
     }
-    
-    const serviceContract = await this.serviceContractModel.findById(id)
+
+    const serviceContract = await this.serviceContractModel
+      .findById(id)
       .populate('serviceId')
       .populate('guestId')
       .populate({
@@ -82,7 +98,7 @@ export class ServiceContractService {
       })
       .populate('homeContractStk')
       .exec();
-    
+
     if (!serviceContract) {
       throw new NotFoundException('Hợp đồng dịch vụ không tồn tại');
     }
@@ -93,37 +109,48 @@ export class ServiceContractService {
     });
   }
 
-  async update(id: string, updateServiceContractDto: UpdateServiceContractDto): Promise<ApiResponseType> {
+  async update(
+    id: string,
+    updateServiceContractDto: UpdateServiceContractDto,
+  ): Promise<ApiResponseType> {
     const isValidId = Types.ObjectId.isValid(id);
     if (!isValidId) {
       throw new NotFoundException('Hợp đồng dịch vụ không tồn tại');
     }
-    
+
     // Thực hiện các kiểm tra nếu có cập nhật các trường tham chiếu
     if (updateServiceContractDto.serviceId) {
-      await this.serviceService.findOne(updateServiceContractDto.serviceId.toString());
+      await this.serviceService.findOne(
+        updateServiceContractDto.serviceId.toString(),
+      );
     }
-    
+
     if (updateServiceContractDto.homeId) {
-      await this.homeService.findOne(updateServiceContractDto.homeId.toString());
+      await this.homeService.findOne(
+        updateServiceContractDto.homeId.toString(),
+      );
     }
-    
+
     if (updateServiceContractDto.guestId) {
-      await this.guestService.findOne(updateServiceContractDto.guestId.toString());
+      await this.guestService.findOne(
+        updateServiceContractDto.guestId.toString(),
+      );
     }
-    
+
     if (updateServiceContractDto.homeContractStk) {
-      await this.homeContractService.findOne(updateServiceContractDto.homeContractStk.toString());
+      await this.homeContractService.findOne(
+        updateServiceContractDto.homeContractStk.toString(),
+      );
     }
-    
+
     const updatedServiceContract = await this.serviceContractModel
       .findByIdAndUpdate(id, updateServiceContractDto, { new: true })
       .exec();
-    
+
     if (!updatedServiceContract) {
       throw new NotFoundException('Hợp đồng dịch vụ không tồn tại');
     }
-    
+
     return createApiResponse({
       statusCode: 200,
       message: 'Cập nhật hợp đồng dịch vụ thành công',
@@ -136,13 +163,15 @@ export class ServiceContractService {
     if (!isValidId) {
       throw new NotFoundException('Hợp đồng dịch vụ không tồn tại');
     }
-    
-    const deletedServiceContract = await this.serviceContractModel.findByIdAndDelete(id).exec();
-    
+
+    const deletedServiceContract = await this.serviceContractModel
+      .findByIdAndDelete(id)
+      .exec();
+
     if (!deletedServiceContract) {
       throw new NotFoundException('Hợp đồng dịch vụ không tồn tại');
     }
-    
+
     return createApiResponse({
       statusCode: 200,
       message: 'Xóa hợp đồng dịch vụ thành công',
@@ -155,8 +184,9 @@ export class ServiceContractService {
     if (!isValidId) {
       throw new NotFoundException('Căn hộ không tồn tại');
     }
-    
-    const contracts = await this.serviceContractModel.find({ homeId })
+
+    const contracts = await this.serviceContractModel
+      .find({ homeId })
       .populate('serviceId')
       .populate('guestId')
       .populate({
@@ -167,7 +197,7 @@ export class ServiceContractService {
       })
       .populate('homeContractStk')
       .exec();
-    
+
     return createApiResponse({
       statusCode: 200,
       message: 'Lấy danh sách hợp đồng dịch vụ theo căn hộ thành công',
@@ -180,8 +210,9 @@ export class ServiceContractService {
     if (!isValidId) {
       throw new NotFoundException('Khách hàng không tồn tại');
     }
-    
-    const contracts = await this.serviceContractModel.find({ guestId })
+
+    const contracts = await this.serviceContractModel
+      .find({ guestId })
       .populate('serviceId')
       .populate('guestId')
       .populate({
@@ -192,7 +223,7 @@ export class ServiceContractService {
       })
       .populate('homeContractStk')
       .exec();
-    
+
     return createApiResponse({
       statusCode: 200,
       message: 'Lấy danh sách hợp đồng dịch vụ theo khách hàng thành công',
@@ -205,8 +236,9 @@ export class ServiceContractService {
     if (!isValidId) {
       throw new NotFoundException('Hợp đồng nhà không tồn tại');
     }
-    
-    const contracts = await this.serviceContractModel.find({ homeContractStk: homeContractId })
+
+    const contracts = await this.serviceContractModel
+      .find({ homeContractStk: homeContractId })
       .populate('serviceId')
       .populate('guestId')
       .populate({
@@ -217,7 +249,7 @@ export class ServiceContractService {
       })
       .populate('homeContractStk')
       .exec();
-    
+
     return createApiResponse({
       statusCode: 200,
       message: 'Lấy danh sách hợp đồng dịch vụ theo hợp đồng nhà thành công',
@@ -230,8 +262,9 @@ export class ServiceContractService {
     if (!isValidId) {
       throw new NotFoundException('Dịch vụ không tồn tại');
     }
-    
-    const contracts = await this.serviceContractModel.find({ serviceId })
+
+    const contracts = await this.serviceContractModel
+      .find({ serviceId })
       .populate('serviceId')
       .populate('guestId')
       .populate({
@@ -242,11 +275,11 @@ export class ServiceContractService {
       })
       .populate('homeContractStk')
       .exec();
-    
+
     return createApiResponse({
       statusCode: 200,
       message: 'Lấy danh sách hợp đồng dịch vụ theo dịch vụ thành công',
       data: contracts,
     });
   }
-} 
+}

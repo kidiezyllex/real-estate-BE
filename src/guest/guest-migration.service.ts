@@ -14,17 +14,16 @@ export class GuestMigrationService {
       // Update all guests that don't have gender field set
       await this.guestModel.updateMany(
         { gender: { $exists: false } },
-        { $set: { gender: null } }
+        { $set: { gender: null } },
       );
 
       // Update all guests that don't have avatarUrl field set
       await this.guestModel.updateMany(
         { avatarUrl: { $exists: false } },
-        { $set: { avatarUrl: null } }
+        { $set: { avatarUrl: null } },
       );
-
     } catch (error) {
       throw error;
     }
   }
-} 
+}

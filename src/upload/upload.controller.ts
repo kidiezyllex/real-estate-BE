@@ -7,7 +7,13 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiConsumes, ApiBody, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiConsumes,
+  ApiBody,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { UploadService } from './upload.service';
 import { createApiResponse, ApiResponseType } from '../utils/response.util';
 
@@ -43,7 +49,11 @@ export class UploadController {
           type: 'object',
           properties: {
             public_id: { type: 'string', example: 'real-estate/abc123' },
-            url: { type: 'string', example: 'https://res.cloudinary.com/dtm3qtje7/image/upload/v1234567890/real-estate/abc123.jpg' },
+            url: {
+              type: 'string',
+              example:
+                'https://res.cloudinary.com/dtm3qtje7/image/upload/v1234567890/real-estate/abc123.jpg',
+            },
             width: { type: 'number', example: 800 },
             height: { type: 'number', example: 600 },
             format: { type: 'string', example: 'jpg' },
@@ -62,7 +72,9 @@ export class UploadController {
       fileFilter: (req, file, callback) => {
         if (!file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
           return callback(
-            new BadRequestException('Chỉ chấp nhận file hình ảnh (jpg, jpeg, png, gif)'),
+            new BadRequestException(
+              'Chỉ chấp nhận file hình ảnh (jpg, jpeg, png, gif)',
+            ),
             false,
           );
         }
@@ -73,14 +85,16 @@ export class UploadController {
       },
     }),
   )
-  async uploadImage(@UploadedFile() file: Express.Multer.File): Promise<ApiResponseType> {
+  async uploadImage(
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<ApiResponseType> {
     if (!file) {
       throw new BadRequestException('Vui lòng chọn file để upload');
     }
 
     try {
       const result = await this.uploadService.uploadImage(file);
-      
+
       return createApiResponse({
         statusCode: HttpStatus.OK,
         message: 'Upload hình ảnh thành công',
@@ -90,4 +104,4 @@ export class UploadController {
       throw new BadRequestException(`Lỗi upload hình ảnh: ${error.message}`);
     }
   }
-} 
+}

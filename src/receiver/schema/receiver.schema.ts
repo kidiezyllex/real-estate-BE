@@ -10,27 +10,27 @@ export class Receiver {
 
   @Prop()
   phone: string;
-  
+
   @Prop()
   email: string;
-  
+
   @Prop()
   taxcode: string;
-  
+
   @Prop()
   bankAccount: string;
-  
+
   @Prop()
   bankNumber: string;
-  
+
   @Prop()
   bank: string;
-  
+
   @Prop()
   type: number;
-  
+
   @Prop()
   note: string;
 }
 
-export const ReceiverSchema = SchemaFactory.createForClass(Receiver); 
+export const ReceiverSchema = SchemaFactory.createForClass(Receiver);

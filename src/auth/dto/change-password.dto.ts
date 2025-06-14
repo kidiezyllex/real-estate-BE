@@ -16,4 +16,4 @@ export class ChangePasswordDto {
     required: true,
   })
   newPassword: string;
-} 
+}
