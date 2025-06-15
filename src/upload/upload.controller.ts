@@ -18,7 +18,7 @@ import { UploadService } from './upload.service';
 import { createApiResponse, ApiResponseType } from '../utils/response.util';
 
 @ApiTags('Upload')
-@Controller('api/v1/upload')
+@Controller('upload')
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
