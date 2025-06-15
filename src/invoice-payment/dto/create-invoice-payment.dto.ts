@@ -6,21 +6,24 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsString,
+  ValidateIf,
 } from 'class-validator';
 import { Types } from 'mongoose';
 
 export class CreateInvoicePaymentDto {
-  @ApiProperty({
-    description: 'ID của căn hộ',
+  @ApiPropertyOptional({
+    description: 'ID của căn hộ (bắt buộc nếu không có homeContractId)',
     example: '665b1c2f8f1b2a001e6e7a30',
   })
+  @ValidateIf((o) => !o.homeContractId)
   @IsNotEmpty()
   @IsMongoId()
-  homeId: Types.ObjectId;
+  homeId?: Types.ObjectId;
 
   @ApiProperty({
     description: 'Loại hóa đơn (1: Tiền thuê nhà, 2: Tiền dịch vụ)',
-    example: 2,
+    example: 1,
   })
   @IsNotEmpty()
   @IsNumber()
@@ -51,15 +54,21 @@ export class CreateInvoicePaymentDto {
   @IsMongoId()
   receiverId?: Types.ObjectId;
 
-  @ApiProperty({ description: 'Ngày bắt đầu', example: '2024-07-01' })
-  @IsNotEmpty()
+  @ApiPropertyOptional({ 
+    description: 'Ngày bắt đầu (tự động tính nếu không cung cấp)', 
+    example: '2024-07-01' 
+  })
+  @IsOptional()
   @IsDateString()
-  dateStar: string;
+  dateStar?: string;
 
-  @ApiProperty({ description: 'Ngày kết thúc', example: '2024-10-01' })
-  @IsNotEmpty()
+  @ApiPropertyOptional({ 
+    description: 'Ngày kết thúc (tự động tính nếu không cung cấp)', 
+    example: '2024-10-01' 
+  })
+  @IsOptional()
   @IsDateString()
-  dateEnd: string;
+  dateEnd?: string;
 
   @ApiPropertyOptional({
     description: 'Ngày nhắc thanh toán',
@@ -86,23 +95,31 @@ export class CreateInvoicePaymentDto {
   datePaymentReal?: string;
 
   @ApiPropertyOptional({
-    description: 'Trạng thái thanh toán (1: Chưa thanh toán, 2: Đã thanh toán)',
-    example: 2,
+    description: 'Trạng thái thanh toán (0: Chưa thanh toán, 1: Đã thanh toán)',
+    example: 0,
   })
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   statusPaym?: number;
 
-  @ApiPropertyOptional({ description: 'Tổng tiền nhận', example: 12000000 })
+  @ApiPropertyOptional({ description: 'Tổng tiền nhận', example: 1000000 })
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   totalReceive?: number;
 
-  @ApiPropertyOptional({ description: 'Tổng tiền gửi', example: 11500000 })
+  @ApiPropertyOptional({ description: 'Tổng tiền gửi', example: 1000000 })
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   totalSend?: number;
+
+  @ApiPropertyOptional({ 
+    description: 'Ghi chú', 
+    example: 'Tiền nhà tháng 6' 
+  })
+  @IsOptional()
+  @IsString()
+  note?: string;
 }

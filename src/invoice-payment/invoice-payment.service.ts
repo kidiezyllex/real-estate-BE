@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { ApiResponseType, createApiResponse } from 'src/utils/response.util';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -27,8 +27,25 @@ export class InvoicePaymentService {
   async create(
     createInvoicePaymentDto: CreateInvoicePaymentDto,
   ): Promise<ApiResponseType> {
-    await this.homeService.findOne(createInvoicePaymentDto.homeId.toString());
+    let homeId = createInvoicePaymentDto.homeId;
 
+    if (!homeId && createInvoicePaymentDto.homeContractId) {
+      const homeContractResponse = await this.homeContractService.findOne(
+        createInvoicePaymentDto.homeContractId.toString(),
+      );
+      // homeId is populated, so we need to get the _id from the populated object
+      homeId = homeContractResponse.data.homeId._id || homeContractResponse.data.homeId;
+      console.log('Derived homeId from contract:', homeId);
+    }
+
+    if (!homeId) {
+      throw new BadRequestException('homeId hoặc homeContractId là bắt buộc');
+    }
+
+    // Validate homeId exists
+    await this.homeService.findOne(homeId.toString());
+
+    // Validate other references if provided
     if (createInvoicePaymentDto.homeContractId) {
       await this.homeContractService.findOne(
         createInvoicePaymentDto.homeContractId.toString(),
@@ -47,9 +64,16 @@ export class InvoicePaymentService {
       );
     }
 
-    const createdInvoicePayment = new this.invoicePaymentModel(
-      createInvoicePaymentDto,
-    );
+    // Set default dates if not provided
+    const now = new Date();
+    const invoiceData = {
+      ...createInvoicePaymentDto,
+      homeId,
+      dateStar: createInvoicePaymentDto.dateStar || now.toISOString().split('T')[0],
+      dateEnd: createInvoicePaymentDto.dateEnd || new Date(now.getFullYear(), now.getMonth() + 1, now.getDate()).toISOString().split('T')[0],
+    };
+
+    const createdInvoicePayment = new this.invoicePaymentModel(invoiceData);
     const createResult = await createdInvoicePayment.save();
 
     return createApiResponse({

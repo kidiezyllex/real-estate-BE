@@ -27,28 +27,39 @@ export class ServiceContractService {
   async create(
     createServiceContractDto: CreateServiceContractDto,
   ): Promise<ApiResponseType> {
-    // Kiểm tra xem dịch vụ có tồn tại hay không
     await this.serviceService.findOne(
       createServiceContractDto.serviceId.toString(),
     );
 
-    // Kiểm tra xem căn hộ có tồn tại hay không
     await this.homeService.findOne(createServiceContractDto.homeId.toString());
 
-    // Kiểm tra xem khách hàng có tồn tại hay không
     await this.guestService.findOne(
       createServiceContractDto.guestId.toString(),
     );
 
-    // Nếu có liên kết với hợp đồng nhà, kiểm tra xem hợp đồng nhà có tồn tại không
-    if (createServiceContractDto.homeContractStk) {
+    if (createServiceContractDto.homeContractId) {
       await this.homeContractService.findOne(
-        createServiceContractDto.homeContractStk.toString(),
+        createServiceContractDto.homeContractId.toString(),
       );
     }
 
+    const serviceContractData = {
+      serviceId: createServiceContractDto.serviceId,
+      homeId: createServiceContractDto.homeId,
+      guestId: createServiceContractDto.guestId,
+      homeContractStk: createServiceContractDto.homeContractId,
+      signDate: createServiceContractDto.signDate || new Date().toISOString(),
+      payCycle: createServiceContractDto.payCycle,
+      duration: createServiceContractDto.duration,
+      unitCost: createServiceContractDto.price,
+      dateStar: createServiceContractDto.dateStar,
+      dateEnd: createServiceContractDto.dateEnd || this.calculateEndDate(createServiceContractDto.dateStar, createServiceContractDto.duration),
+      statusContrac: createServiceContractDto.statusContrac || 1,
+      limit: createServiceContractDto.limit || 0,
+    };
+
     const createdServiceContract = new this.serviceContractModel(
-      createServiceContractDto,
+      serviceContractData,
     );
     const createResult = await createdServiceContract.save();
 
@@ -57,6 +68,13 @@ export class ServiceContractService {
       message: 'Tạo hợp đồng dịch vụ thành công',
       data: createResult,
     });
+  }
+
+  private calculateEndDate(startDate: string, duration: number): string {
+    const start = new Date(startDate);
+    const end = new Date(start);
+    end.setMonth(end.getMonth() + duration);
+    return end.toISOString().split('T')[0];
   }
 
   async findAll(): Promise<ApiResponseType> {
@@ -137,14 +155,25 @@ export class ServiceContractService {
       );
     }
 
-    if (updateServiceContractDto.homeContractStk) {
+    if (updateServiceContractDto.homeContractId) {
       await this.homeContractService.findOne(
-        updateServiceContractDto.homeContractStk.toString(),
+        updateServiceContractDto.homeContractId.toString(),
       );
     }
 
+    // Map DTO fields to schema fields for update
+    const updateData: any = { ...updateServiceContractDto };
+    if (updateServiceContractDto.homeContractId !== undefined) {
+      updateData.homeContractStk = updateServiceContractDto.homeContractId;
+      delete updateData.homeContractId;
+    }
+    if (updateServiceContractDto.price !== undefined) {
+      updateData.unitCost = updateServiceContractDto.price;
+      delete updateData.price;
+    }
+
     const updatedServiceContract = await this.serviceContractModel
-      .findByIdAndUpdate(id, updateServiceContractDto, { new: true })
+      .findByIdAndUpdate(id, updateData, { new: true })
       .exec();
 
     if (!updatedServiceContract) {

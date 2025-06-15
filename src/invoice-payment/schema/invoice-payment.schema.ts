@@ -7,7 +7,7 @@ import { ServiceContract } from '../../service-contract/schema/service-contract.
 
 export type InvoicePaymentDocument = InvoicePayment & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class InvoicePayment {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'HomeContract' })
   homeContractId: HomeContract;
@@ -39,7 +39,7 @@ export class InvoicePayment {
   @Prop({ required: true })
   dateEnd: Date;
 
-  @Prop({ default: 1 })
+  @Prop({ default: 0 })
   statusPaym: number;
 
   @Prop({ type: Number, default: 0 })
@@ -49,7 +49,7 @@ export class InvoicePayment {
   totalSend: number;
 
   @Prop()
-  createdAt: Date;
+  note: string;
 }
 
 export const InvoicePaymentSchema =

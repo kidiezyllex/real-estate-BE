@@ -40,12 +40,12 @@ export class CreateServiceContractDto {
   })
   @IsOptional()
   @IsMongoId()
-  homeContractStk?: Types.ObjectId;
+  homeContractId?: Types.ObjectId;
 
-  @ApiProperty({ description: 'Ngày ký hợp đồng', example: '2024-07-01' })
-  @IsNotEmpty()
+  @ApiPropertyOptional({ description: 'Ngày ký hợp đồng', example: '2024-07-01' })
+  @IsOptional()
   @IsDateString()
-  signDate: string;
+  signDate?: string;
 
   @ApiProperty({ description: 'Chu kỳ thanh toán (tháng)', example: 12 })
   @IsNotEmpty()
@@ -63,17 +63,17 @@ export class CreateServiceContractDto {
   @IsNotEmpty()
   @IsNumber()
   @Type(() => Number)
-  unitCost: number;
+  price: number;
 
   @ApiProperty({ description: 'Ngày bắt đầu hợp đồng', example: '2024-07-01' })
   @IsNotEmpty()
   @IsDateString()
   dateStar: string;
 
-  @ApiProperty({ description: 'Ngày kết thúc hợp đồng', example: '2027-07-01' })
-  @IsNotEmpty()
+  @ApiPropertyOptional({ description: 'Ngày kết thúc hợp đồng', example: '2027-07-01' })
+  @IsOptional()
   @IsDateString()
-  dateEnd: string;
+  dateEnd?: string;
 
   @ApiPropertyOptional({
     description:
