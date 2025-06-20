@@ -13,10 +13,10 @@ import { Types } from 'mongoose';
 
 export class CreateInvoicePaymentDto {
   @ApiPropertyOptional({
-    description: 'ID của căn hộ (bắt buộc nếu không có homeContractId)',
+    description: 'ID của căn hộ (bắt buộc nếu không có homeContractId hoặc serviceContractId)',
     example: '665b1c2f8f1b2a001e6e7a30',
   })
-  @ValidateIf((o) => !o.homeContractId)
+  @ValidateIf((o) => !o.homeContractId && !o.serviceContractId)
   @IsNotEmpty()
   @IsMongoId()
   homeId?: Types.ObjectId;
@@ -122,4 +122,40 @@ export class CreateInvoicePaymentDto {
   @IsOptional()
   @IsString()
   note?: string;
+}
+
+export class GeneratePaymentDto {
+  @ApiProperty({
+    description: 'Ngày bắt đầu chu kỳ thanh toán',
+    example: '2025-06-20',
+  })
+  @IsNotEmpty()
+  @IsDateString()
+  startDate: string;
+
+  @ApiProperty({
+    description: 'Ngày kết thúc chu kỳ thanh toán',
+    example: '2025-07-20',
+  })
+  @IsNotEmpty()
+  @IsDateString()
+  endDate: string;
+
+  @ApiProperty({
+    description: 'Chu kỳ thanh toán (tháng)',
+    example: 1,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  @Type(() => Number)
+  paymentCycle: number;
+
+  @ApiProperty({
+    description: 'Số tiền thanh toán',
+    example: 200000,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  @Type(() => Number)
+  amount: number;
 }

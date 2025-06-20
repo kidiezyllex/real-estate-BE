@@ -132,8 +132,11 @@ export class HomeService {
       throw new NotFoundException('Chủ nhà không tồn tại');
     }
 
+    // Convert string to ObjectId for proper querying
+    const objectId = new Types.ObjectId(homeOwnerId);
+
     const homes = await this.homeModel
-      .find({ homeOwnerId })
+      .find({ homeOwnerId: objectId })
       .populate('homeOwnerId')
       .populate('homeContract')
       .exec();

@@ -202,8 +202,10 @@ export class HomeContractService {
       throw new NotFoundException('Căn hộ không tồn tại');
     }
 
+    const objectId = new Types.ObjectId(homeId);
+
     const contracts = await this.homeContractModel
-      .find({ homeId })
+      .find({ homeId: objectId })
       .populate('guestId')
       .populate({
         path: 'homeId',
@@ -226,8 +228,11 @@ export class HomeContractService {
       throw new NotFoundException('Khách hàng không tồn tại');
     }
 
+    // Convert string to ObjectId for proper querying
+    const objectId = new Types.ObjectId(guestId);
+
     const contracts = await this.homeContractModel
-      .find({ guestId })
+      .find({ guestId: objectId })
       .populate('guestId')
       .populate({
         path: 'homeId',

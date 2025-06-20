@@ -35,11 +35,18 @@ export class InvoicePaymentService {
       );
       // homeId is populated, so we need to get the _id from the populated object
       homeId = homeContractResponse.data.homeId._id || homeContractResponse.data.homeId;
-      console.log('Derived homeId from contract:', homeId);
+    }
+
+    if (!homeId && createInvoicePaymentDto.serviceContractId) {
+      const serviceContractResponse = await this.serviceContractService.findOne(
+        createInvoicePaymentDto.serviceContractId.toString(),
+      );
+      // homeId is populated, so we need to get the _id from the populated object
+      homeId = serviceContractResponse.data.homeId._id || serviceContractResponse.data.homeId;
     }
 
     if (!homeId) {
-      throw new BadRequestException('homeId hoặc homeContractId là bắt buộc');
+      throw new BadRequestException('homeId, homeContractId hoặc serviceContractId là bắt buộc');
     }
 
     // Validate homeId exists
@@ -216,8 +223,11 @@ export class InvoicePaymentService {
       throw new NotFoundException('Hợp đồng nhà không tồn tại');
     }
 
+    // Convert string to ObjectId for proper querying
+    const objectId = new Types.ObjectId(homeContractId);
+
     const payments = await this.invoicePaymentModel
-      .find({ homeContractId })
+      .find({ homeContractId: objectId })
       .populate('homeContractId')
       .populate({
         path: 'homeId',
@@ -249,8 +259,11 @@ export class InvoicePaymentService {
       throw new NotFoundException('Hợp đồng dịch vụ không tồn tại');
     }
 
+    // Convert string to ObjectId for proper querying
+    const objectId = new Types.ObjectId(serviceContractId);
+
     const payments = await this.invoicePaymentModel
-      .find({ serviceContractId })
+      .find({ serviceContractId: objectId })
       .populate('homeContractId')
       .populate({
         path: 'homeId',
@@ -280,8 +293,11 @@ export class InvoicePaymentService {
       throw new NotFoundException('Căn hộ không tồn tại');
     }
 
+    // Convert string to ObjectId for proper querying
+    const objectId = new Types.ObjectId(homeId);
+
     const payments = await this.invoicePaymentModel
-      .find({ homeId })
+      .find({ homeId: objectId })
       .populate('homeContractId')
       .populate({
         path: 'homeId',
@@ -425,6 +441,12 @@ export class InvoicePaymentService {
 
   async generatePaymentsForServiceContract(
     serviceContractId: string,
+    generatePaymentDto?: {
+      startDate: string;
+      endDate: string;
+      paymentCycle: number;
+      amount: number;
+    },
   ): Promise<ApiResponseType> {
     const serviceContractResponse =
       await this.serviceContractService.findOne(serviceContractId);
@@ -434,44 +456,74 @@ export class InvoicePaymentService {
       throw new NotFoundException('Hợp đồng dịch vụ không tồn tại');
     }
 
-    // Tạo các khoản thanh toán dựa trên thông tin hợp đồng dịch vụ
-    const startDate = new Date(serviceContract.dateStart);
-    const endDate = new Date(serviceContract.dateEnd);
-
-    // Tính số tháng giữa ngày bắt đầu và kết thúc
-    const months =
-      (endDate.getFullYear() - startDate.getFullYear()) * 12 +
-      (endDate.getMonth() - startDate.getMonth());
-
-    const paymentPromises = [];
-
-    for (let i = 0; i <= months; i++) {
-      const paymentDate = new Date(startDate);
-      paymentDate.setMonth(paymentDate.getMonth() + i);
-
-      // Tạo thông tin hóa đơn
-      const payment = new this.invoicePaymentModel({
-        serviceContractId: serviceContract._id,
-        homeId: serviceContract.homeId,
-        dateCreate: new Date(),
-        datePaymentExpec: paymentDate,
-        datePaymentRemind: new Date(
-          paymentDate.getTime() - 7 * 24 * 60 * 60 * 1000,
-        ), // 7 ngày trước hạn
-        statusPaym: 1, // Chưa thanh toán
-        totalReceive: serviceContract.price,
-        note: `Hóa đơn dịch vụ ${serviceContract.serviceId.name} tháng ${paymentDate.getMonth() + 1}/${paymentDate.getFullYear()}`,
-      });
-
-      paymentPromises.push(payment.save());
+    // Validate required fields
+    if (!serviceContract.homeId) {
+      throw new BadRequestException('Hợp đồng dịch vụ thiếu thông tin căn hộ');
     }
 
+    // Use parameters from request body if provided, otherwise use service contract data
+    const startDate = generatePaymentDto?.startDate 
+      ? new Date(generatePaymentDto.startDate)
+      : new Date(serviceContract.dateStar);
+    const endDate = generatePaymentDto?.endDate
+      ? new Date(generatePaymentDto.endDate)
+      : new Date(serviceContract.dateEnd);
+    const paymentAmount = generatePaymentDto?.amount || serviceContract.unitCost;
+    const paymentCycle = generatePaymentDto?.paymentCycle || serviceContract.payCycle;
+
+    // Validate dates
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      throw new BadRequestException('Ngày bắt đầu hoặc ngày kết thúc không hợp lệ');
+    }
+
+    if (startDate >= endDate) {
+      throw new BadRequestException('Ngày bắt đầu phải nhỏ hơn ngày kết thúc');
+    }
+
+    // For the provided date range, create a single payment
+    const paymentPromises = [];
+
+    // Create a single invoice payment for the specified period
+    const payment = new this.invoicePaymentModel({
+      type: 2, // Service payment type
+      serviceContractId: serviceContract._id,
+      homeId: serviceContract.homeId,
+      dateStar: startDate.toISOString().split('T')[0],
+      dateEnd: endDate.toISOString().split('T')[0],
+      datePaymentExpec: endDate, // Payment expected on end date
+      datePaymentRemind: new Date(
+        endDate.getTime() - 7 * 24 * 60 * 60 * 1000,
+      ), // 7 days before due date
+      statusPaym: 0, // Unpaid
+      totalReceive: paymentAmount,
+      note: `Hóa đơn dịch vụ ${serviceContract.serviceId?.name || 'N/A'} từ ${startDate.toLocaleDateString('vi-VN')} đến ${endDate.toLocaleDateString('vi-VN')}`,
+    });
+
+    paymentPromises.push(payment.save());
+
     const createdPayments = await Promise.all(paymentPromises);
+
+    // Populate the created payments with related data
+    const populatedPayments = await this.invoicePaymentModel
+      .find({ _id: { $in: createdPayments.map(p => p._id) } })
+      .populate({
+        path: 'serviceContractId',
+        populate: {
+          path: 'serviceId',
+        },
+      })
+      .populate({
+        path: 'homeId',
+        populate: {
+          path: 'homeOwnerId',
+        },
+      })
+      .exec();
 
     return createApiResponse({
       statusCode: 201,
       message: 'Tạo các hóa đơn từ hợp đồng dịch vụ thành công',
-      data: createdPayments,
+      data: populatedPayments,
     });
   }
 }

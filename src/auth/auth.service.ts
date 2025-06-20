@@ -14,27 +14,61 @@ export class AuthService {
   ) {}
 
   async login(loginUserDto: LoginUserDto): Promise<ApiResponseType> {
-    const user = await this.userService.findByEmail(loginUserDto.email);
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
+    try {
+      const user = await this.userService.findByEmail(loginUserDto.email);
+      
+      if (!user) {
+        return createApiResponse({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'Tài khoản không tồn tại trong hệ thống',
+          data: null,
+        });
+      }
 
-    const isPasswordMatch = await bcrypt.compare(
-      loginUserDto.password,
-      user.password,
-    );
-    if (!isPasswordMatch) {
-      throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
-    }
-    const payload = { sub: user._id, email: user.email };
-    const token = this.jwtService.sign(payload);
+      const isPasswordMatch = await bcrypt.compare(
+        loginUserDto.password,
+        user.password,
+      );
+      
+      if (!isPasswordMatch) {
+        return createApiResponse({
+          statusCode: HttpStatus.UNAUTHORIZED,
+          message: 'Mật khẩu không chính xác',
+          data: null,
+        });
+      }
 
-    return createApiResponse({
-      statusCode: HttpStatus.OK,
-      data: {
-        token: token,
-      },
-    });
+      const payload = { sub: user._id, email: user.email };
+      const token = this.jwtService.sign(payload);
+
+      return createApiResponse({
+        statusCode: HttpStatus.OK,
+        message: 'Đăng nhập thành công',
+        data: {
+          token: token,
+          user: {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            age: user.age,
+          },
+        },
+      });
+    } catch (error) {
+      if (error.name === 'JsonWebTokenError') {
+        return createApiResponse({
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Lỗi tạo token xác thực',
+          data: null,
+        });
+      }
+      
+      return createApiResponse({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Lỗi hệ thống, vui lòng thử lại sau',
+        data: null,
+      });
+    }
   }
 
   async register(createUserDto: CreateUserDto): Promise<ApiResponseType> {

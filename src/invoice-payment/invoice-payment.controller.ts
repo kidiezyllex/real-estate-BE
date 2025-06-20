@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { InvoicePaymentService } from './invoice-payment.service';
-import { CreateInvoicePaymentDto } from './dto/create-invoice-payment.dto';
+import { CreateInvoicePaymentDto, GeneratePaymentDto } from './dto/create-invoice-payment.dto';
 import { UpdateInvoicePaymentDto } from './dto/update-invoice-payment.dto';
 import {
   ApiBearerAuth,
@@ -130,9 +130,11 @@ export class InvoicePaymentController {
   })
   generatePaymentsForServiceContract(
     @Param('serviceContractId') serviceContractId: string,
+    @Body() generatePaymentDto: GeneratePaymentDto,
   ) {
     return this.invoicePaymentService.generatePaymentsForServiceContract(
       serviceContractId,
+      generatePaymentDto,
     );
   }
 }

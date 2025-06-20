@@ -136,7 +136,7 @@ export class ServiceContractService {
       throw new NotFoundException('Hợp đồng dịch vụ không tồn tại');
     }
 
-    // Thực hiện các kiểm tra nếu có cập nhật các trường tham chiếu
+    // Thực hiện các kiểm tra nếu cập nhật các trường tham chiếu
     if (updateServiceContractDto.serviceId) {
       await this.serviceService.findOne(
         updateServiceContractDto.serviceId.toString(),
@@ -214,8 +214,11 @@ export class ServiceContractService {
       throw new NotFoundException('Căn hộ không tồn tại');
     }
 
+    // Convert string to ObjectId for proper querying
+    const objectId = new Types.ObjectId(homeId);
+
     const contracts = await this.serviceContractModel
-      .find({ homeId })
+      .find({ homeId: objectId })
       .populate('serviceId')
       .populate('guestId')
       .populate({
@@ -240,8 +243,11 @@ export class ServiceContractService {
       throw new NotFoundException('Khách hàng không tồn tại');
     }
 
+    // Convert string to ObjectId for proper querying
+    const objectId = new Types.ObjectId(guestId);
+
     const contracts = await this.serviceContractModel
-      .find({ guestId })
+      .find({ guestId: objectId })
       .populate('serviceId')
       .populate('guestId')
       .populate({
@@ -266,8 +272,11 @@ export class ServiceContractService {
       throw new NotFoundException('Hợp đồng nhà không tồn tại');
     }
 
+    // Convert string to ObjectId for proper querying
+    const objectId = new Types.ObjectId(homeContractId);
+
     const contracts = await this.serviceContractModel
-      .find({ homeContractStk: homeContractId })
+      .find({ homeContractStk: objectId })
       .populate('serviceId')
       .populate('guestId')
       .populate({
@@ -292,8 +301,11 @@ export class ServiceContractService {
       throw new NotFoundException('Dịch vụ không tồn tại');
     }
 
+    // Convert string to ObjectId for proper querying
+    const objectId = new Types.ObjectId(serviceId);
+
     const contracts = await this.serviceContractModel
-      .find({ serviceId })
+      .find({ serviceId: objectId })
       .populate('serviceId')
       .populate('guestId')
       .populate({
